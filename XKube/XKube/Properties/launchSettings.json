@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "xkube": {
+      "commandName": "Project",
+      "commandLineArgs": "get pods"
+    }
+  }
+}
