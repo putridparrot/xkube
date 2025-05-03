@@ -2,7 +2,7 @@
   "profiles": {
     "xkube": {
       "commandName": "Project",
-      "commandLineArgs": "get pods"
+      "commandLineArgs": "get apiresources"
     }
   }
 }

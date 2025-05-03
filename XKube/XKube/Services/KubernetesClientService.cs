@@ -80,6 +80,18 @@ internal class KubernetesClientService : IKubernetesClientService
         return await GetOrDefault(_kubernetes, k => k.CoreV1.ListNodeAsync(), () => new V1NodeList([]));
     }
 
+    public async Task<IResult<V1APIResourceList>> GetApiResourcesAsync()
+    {
+        return await GetOrDefault(_kubernetes,
+            k => k.CoreV1.GetAPIResourcesAsync(),
+            () => new V1APIResourceList(string.Empty, []));
+    }
+
+    public async Task<IResult<V1IngressList>> GetIngressesAsync(string? nameSpace = null)
+    {
+        return await GetOrDefault(_kubernetes, k => nameSpace.HasValue() ? k.NetworkingV1.ListNamespacedIngressAsync(nameSpace) : k.NetworkingV1.ListIngressForAllNamespacesAsync(),
+            () => new V1IngressList([]));
+    }
 
     private static async Task<IResult<T>> GetOrDefault<T>(IKubernetes? k, Func<IKubernetes, Task<T>> getter, Func<T> defaultResult)
     {

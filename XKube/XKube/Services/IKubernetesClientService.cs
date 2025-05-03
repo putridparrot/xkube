@@ -12,6 +12,7 @@ internal interface IKubernetesClientService
 
     Task<IResult<V1PodList>> GetPodsAsync(string? nameSpace = null, bool? watch = null);
     Task<IResult<V1ServiceList>> GetServicesAsync(string? nameSpace = null);
-
+    Task<IResult<V1IngressList>> GetIngressesAsync(string? nameSpace = null);
     Task<IResult<V1NodeList>> GetNodesAsync();
+    Task<IResult<V1APIResourceList>> GetApiResourcesAsync();
 }

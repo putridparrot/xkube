@@ -20,14 +20,14 @@ app.Configure(config =>
     config.SetApplicationName("xkube");
     config.AddBranch("get", list =>
     {
-        list.AddCommand<GetCommands>("get");
         list.AddCommand<GetPodCommands>("pods");
-        list.AddCommand<GetPodCommands>("nodes");
+        list.AddCommand<GetNodeCommands>("nodes");
         list.AddCommand<GetServiceCommands>("services");
+        list.AddCommand<GetIngressCommands>("ingresses");
+        list.AddCommand<GetApiResourcesCommands>("apiresources");
     });
 
     config.AddCommand<LogCommands>("log");
-    //config.AddCommand<ListCommands>("list");
 });
 
 app.Run(args);

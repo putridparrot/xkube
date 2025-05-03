@@ -8,7 +8,7 @@ using XKube.ViewObjects;
 
 namespace XKube.Commands;
 
-internal class GetServiceCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetServiceCommands.Settings>
+internal class GetIngressCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetIngressCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -22,7 +22,7 @@ internal class GetServiceCommands(IKubernetesClientService kubernetesClientServi
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var items = await kubernetesClientServices.GetServicesAsync(settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
+        var items = await kubernetesClientServices.GetIngressesAsync(settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
         if (items is IFailure failure)
         {
             AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");
