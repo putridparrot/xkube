@@ -4,7 +4,7 @@ using PutridParrot.Results;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using XKube.Services;
-using XKube.ViewObjects;
+using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
@@ -29,7 +29,7 @@ internal class GetIngressCommands(IKubernetesClientService kubernetesClientServi
             return 1;
         }
 
-        var list = items.Value.ToViewObject();
+        var list = items.Value.ToViewModel();
         if (settings.Json)
         {
             Console.Write(JsonSerializer.Serialize(list));

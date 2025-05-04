@@ -1,0 +1,11 @@
+using System.ComponentModel;
+
+namespace XKube.ViewModels;
+
+public class {{Model}}ViewModel
+{
+    {{#Fields}}
+    [DisplayName("{{Title}}")]
+    public string {{PropertyName Title}} { get; set; } = string.Empty;
+    {{/Fields}}
+}

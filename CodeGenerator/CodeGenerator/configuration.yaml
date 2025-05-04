@@ -1,0 +1,1150 @@
+Definitions:
+  - Title: "API Resources"
+    Model: "ApiResource"
+    Description: "List all API resources"
+    Category: "Core"
+    ListMethod: "GetApiResourcesAsync"
+    PropertyName: "Resources"
+    ItemType: "V1APIResource"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl api-resources"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Version"
+        Expression: "p.Item.Version"
+      - Title: "Namespaced"
+        Expression: "p.Item.Namespaced"
+      - Title: "Shortnames"
+        Expression: "p.Item.ShortNames.CsvJoin()"
+      - Title: "Kind"
+        Expression: "p.Item.Kind"
+  - Title: "API Services"
+    Model: "ApiService"
+    Description: "List all API services"
+    Category: "Core"
+    ListMethod: "GetApiServicesAsync"    
+    ItemType: "V1APIService"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get apiservices"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Service"
+        Expression: "p.Item.Status.Conditions[0].Reason"
+      - Title: "Available"
+        Expression: "p.Item.Status.Conditions[0].Status"
+  - Title: "Certificate Signing Requests"
+    Model: "CertificateSigningRequest"
+    Description: "List all Certificate Signing Requests"
+    Category: "Core"
+    ListMethod: "GetCertificateSigningRequestsAsync"    
+    ItemType: "V1CertificateSigningRequest"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Cluster Role Bindings"
+    Model: "ClusterRoleBinding"
+    Description: "List all Cluster Role Bindings"
+    Category: "Core"
+    ListMethod: "GetClusterRoleBindingsAsync"    
+    ItemType: "V1ClusterRoleBinding"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get clusterrolebindings"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Role"
+        Expression: '$"{p.Item.RoleRef.Kind}/{p.Item.RoleRef.Name}"'
+      - Title: "Users"
+        Expression: "GetUsers(p)"
+      - Title: "Groups"
+        Expression: "GetGroups(p)"
+    ExtraMethods:
+        - "private static string? GetGroups(Selectable<V1ClusterRoleBinding> item) => item.Item.Subjects?.Where(s => s.Kind == \"Group\").Select(g => g.Name).CsvJoin();"
+        - "private static string? GetUsers(Selectable<V1ClusterRoleBinding> item) => item.Item.Subjects?.Where(s => s.Kind == \"User\").Select(g => g.Name).CsvJoin();"
+  - Title: "Cluster Roles"
+    Model: "ClusterRole"
+    Description: "List all Cluster Role Bindings"
+    Category: "Core"
+    ListMethod: "GetClusterRolesAsync"    
+    ItemType: "V1ClusterRole"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get clusterroles"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Component Statuses"
+    Model: "ComponentStatus"
+    Description: "List all Component Statuses"
+    Category: "Core"
+    ListMethod: "GetComponentStatusesAsync"    
+    ItemType: "V1ComponentStatus"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get componentstatuses"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Status"
+        Expression: "p.Item.Conditions[0].Status"
+      - Title: "Status"
+        Expression: "p.Item.Conditions[0].Message"
+      - Title: "Error"
+        Expression: "p.Item.Conditions[0].Error"
+  - Title: "Config Maps"
+    Model: "ConfigMap"
+    Description: "List all Config Maps"
+    Category: "Core"
+    ListMethod: "GetConfigMapsAsync"    
+    ItemType: "V1ConfigMap"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get configmaps"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Data"
+        Expression: "p.Item.Data.Count"
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Controller Revisions"
+    Model: "ControllerRevision"
+    Description: "List all Controller Revisions"
+    Category: "Core"
+    ListMethod: "GetControllerRevisionsAsync"    
+    ItemType: "V1ControllerRevision"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get controllerrevisions"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Controller"
+        Expression: "p.Item.Metadata.OwnerReferences[0].Name"
+      - Title: "Revision"
+        Expression: "p.Item.Revision"
+  - Title: "Cron Jobs"
+    Model: "CronJob"
+    Description: "List all Cron Jobs"
+    Category: "Core"
+    ListMethod: "GetCronJobsAsync"    
+    ItemType: "V1CronJob"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get cronjobs"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Custom Resource Definitions"
+    Model: "CustomResourceDefinition"
+    Description: "List all Custom Resource Definitions"
+    Category: "Core"
+    ListMethod: "GetCustomResourceDefinitionsAsync"    
+    ItemType: "V1CustomResourceDefinition"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get crd"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Daemon Sets"
+    Model: "DaemonSet"
+    Description: "List all Daemon Sets"
+    Category: "Core"
+    ListMethod: "GetDaemonSetsAsync"    
+    ItemType: "V1DaemonSet"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get ds"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Desired"
+        Expression: "p.Item.Status.DesiredNumberScheduled"
+      - Title: "Current"
+        Expression: "p.Item.Status.CurrentNumberScheduled"
+      - Title: "Ready"
+        Expression: "p.Item.Status.NumberReady"
+      - Title: "Upto date"
+        Expression: "p.Item.Status.UpdatedNumberScheduled"
+      - Title: "Available"
+        Expression: "p.Item.Status.NumberAvailable"
+  - Title: "Deployments"
+    Model: "Deployment"
+    Description: "List all Deployment"
+    Category: "Core"
+    ListMethod: "GetDeploymentsAsync"    
+    ItemType: "V1Deployment"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get deployments"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Ready"
+        Expression: '$"{p.Item.Status.ReadyReplicas}/{p.Item.Status.AvailableReplicas}"'
+      - Title: "Upto date"
+        Expression: "p.Item.Status.UpdatedReplicas"
+      - Title: "Available"
+        Expression: "p.Item.Status.AvailableReplicas"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Device Classes"
+    Model: "DeviceClass"
+    Description: "List all Device Classes"
+    Category: "Core"
+    ListMethod: "GetDeviceClassesAsync"    
+    ItemType: "V1beta1DeviceClass"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Endpoints"
+    Model: "Endpoint"
+    Description: "List all Endpoints"
+    Category: "Core"
+    ListMethod: "GetEndpointsAsync"    
+    ItemType: "V1Endpoints"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get endpoints"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Endpoints"
+        Expression: "GetEndpointIps(p)"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+    ExtraMethods:
+        - "private static string? GetEndpointIps(Selectable<V1Endpoints> item) => item.Item.Subsets is null ? string.Empty : item.Item.Subsets.SelectMany(s => s.Addresses.Select(a => a.Ip)).CsvJoin();"
+  - Title: "Endpoint Slices"
+    Model: "EndpointSlice"
+    Description: "List all Endpoint Slices"
+    Category: "Core"
+    ListMethod: "GetEndpointSlicesAsync"    
+    ItemType: "V1EndpointSlice"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get endpointslices"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Address Type"
+        Expression: "p.Item.AddressType"
+      - Title: "Endpoints"
+        Expression: "p.Item.Endpoints.SelectMany(e => e.Addresses).CsvJoin()"
+      - Title: "Ports"
+        Expression: "p.Item.Ports.Select(i => i.Port).CsvJoin()"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Flow Schemas"
+    Model: "FlowSchema"
+    Description: "List all Flow Schemas"
+    Category: "Core"
+    ListMethod: "GetFlowSchemasAsync"    
+    ItemType: "V1FlowSchema"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get flowschemas"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Priority Level"
+        Expression: "p.Item.Spec.PriorityLevelConfiguration.Name"
+      - Title: "Matching Precedence"
+        Expression: "p.Item.Spec.MatchingPrecedence"
+      - Title: "Distinguisher Method"
+        Expression: "DistinguisherMethod(p)"
+    ExtraMethods:
+       - "private static string DistinguisherMethod(Selectable<V1FlowSchema> s) => s.Item.Spec.DistinguisherMethod?.Type ?? string.Empty;"
+  - Title: "Horizontal Pod Autoscalers"
+    Model: "HorizontalPodAutoscaler"
+    Description: "List all Horizontal Pod Autoscalers"
+    Category: "Core"
+    ListMethod: "GetHorizontalPodAutoscalersAsync"    
+    ItemType: "V2HorizontalPodAutoscaler"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get hpa"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Ingresses"
+    Model: "Ingress"
+    Description: "List all Ingresses"
+    Category: "Core"
+    ListMethod: "GetIngressesAsync"    
+    ItemType: "V1Ingress"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get ingresses"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Ingress Classes"
+    Model: "IngressClass"
+    Description: "List all Ingress Classes"
+    Category: "Core"
+    ListMethod: "GetIngressClassesAsync"    
+    ItemType: "V1IngressClass"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get ingressclasses"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "IP Addresses"
+    Model: "IpAddress"
+    Description: "List all IP Addresses"
+    Category: "Core"
+    ListMethod: "GetIPAddressesAsync"    
+    ItemType: "V1beta1IPAddress"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Jobs"
+    Model: "Job"
+    Description: "List all Jobs"
+    Category: "Core"
+    ListMethod: "GetJobsAsync"    
+    ItemType: "V1Job"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get jobs"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Lease Candidates"
+    Model: "LeaseCandidate"
+    Description: "List all Lease Candidates"
+    Category: "Core"
+    ListMethod: "GetLeaseCandidatesAsync"    
+    ItemType: "V1alpha2LeaseCandidate"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Leases"
+    Model: "Lease"
+    Description: "List all Leases"
+    Category: "Core"
+    ListMethod: "GetLeasesAsync"    
+    ItemType: "V1Lease"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get leases"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Holder"
+        Expression: "p.Item.Spec.HolderIdentity"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Limit Ranges"
+    Model: "LimitRange"
+    Description: "List all Limit Ranges"
+    Category: "Core"
+    ListMethod: "GetLimitRangesAsync"    
+    ItemType: "V1LimitRange"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get limitranges"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Mutating Admission Policies"
+    Model: "MutatingAdmissionPolicy"
+    Description: "List all Mutating Admission Policies"
+    Category: "Core"
+    ListMethod: "GetMutatingAdmissionPoliciesAsync"    
+    ItemType: "V1alpha1MutatingAdmissionPolicy"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Mutating Admission Policy Bindings"
+    Model: "MutatingAdmissionPolicyBinding"
+    Description: "List all Mutating Admission Policy Bindings"
+    Category: "Core"
+    ListMethod: "GetMutatingAdmissionPolicyBindingsAsync"    
+    ItemType: "V1alpha1MutatingAdmissionPolicyBinding"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Mutating Webhook Configurations"
+    Model: "MutatingWebhookConfiguration"
+    Description: "List all Mutating Webhook Configurations"
+    Category: "Core"
+    ListMethod: "GetMutatingWebhookConfigurationsAsync"    
+    ItemType: "V1MutatingWebhookConfiguration"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Events"
+    Model: "Event"
+    Description: "List all Events"
+    Category: "Core"
+    ListMethod: "GetEventsAsync"    
+    ItemType: "Corev1Event"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get events"
+    Fields:
+      - Title: "Type"
+        Expression: "p.Item.Type"
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Message"
+        Expression: "p.Item.Message"
+      - Title: "Object Name"
+        Expression: "p.Item.InvolvedObject.Name"
+      - Title: "Last Timestamp"
+        Expression: "p.Item.LastTimestamp"
+  - Title: "Namespaces"
+    Model: "Namespace"
+    Description: "List all Namespaces"
+    Category: "Core"
+    ListMethod: "GetNamespacesAsync"    
+    ItemType: "V1Namespace"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get namespaces"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Phase"
+        Expression: "p.Item.Status.Phase"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Network Policies"
+    Model: "NetworkPolicy"
+    Description: "List all Network Policies"
+    Category: "Core"
+    ListMethod: "GetNetworkPoliciesAsync"    
+    ItemType: "V1NetworkPolicy"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get networkpolicies"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Nodes"
+    Model: "Node"
+    Description: "List all Nodes"
+    Category: "Core"
+    ListMethod: "GetNodesAsync"    
+    ItemType: "V1Node"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get nodes"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Status"
+        Expression: "GetStatus(p)"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+      - Title: "Version"
+        Expression: "p.Item.Status.NodeInfo.KubeletVersion"
+    ExtraMethods:
+      - "private static string? GetStatus(Selectable<V1Node> item) => item.Item.Status.Conditions.FirstOrDefault(s => s.Type == \"Ready\")?.Status == \"True\" ? \"Ready\" : string.Empty;"
+  - Title: "Persistent Volume Claims"
+    Description: "List all Persistent Volume Claims"
+    Category: "Core"
+    ListMethod: "GetPersistentVolumeClaimsAsync"    
+    ItemType: "V1PersistentVolumeClaim"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get pvc"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Persistent Volumes"
+    Model: "PersistentVolume"
+    Description: "List all Persistent Volumes"
+    Category: "Core"
+    ListMethod: "GetPersistentVolumesAsync"    
+    ItemType: "V1PersistentVolume"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get persistentvolumes"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Pod Disruption Budgets"
+    Model: "PodDisruptionBudget"
+    Description: "List all Pod Disruption Budgets"
+    Category: "Core"
+    ListMethod: "GetPodDisruptionBudgetsAsync"    
+    ItemType: "V1PodDisruptionBudget"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Pods"
+    Model: "Pod"
+    Description: "List all Pods"
+    Category: "Core"
+    ListMethod: "GetPodsAsync"    
+    #DescribeMethod: "DescribePodAsync(_selected.Name(), _selected.Namespace())"  #-- should we just replace the YAML method
+    ItemType: "V1Pod"
+    IsNamespaced: true
+    #IsWatchable: true
+    KubeCtlHint: "kubectl get pods"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Status"
+        Expression: "p.Item.Status.Phase"
+      - Title: "Restarts"
+        Expression: "$\"{GetRestarts(p)} ({GetLastRestart(p)})\""
+      - Title: "Pod IP"
+        Expression: "p.Item.Status.PodIP"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+    ExtraMethods:
+      - "private static string GetRestarts(Selectable<V1Pod> item) => 
+            item.Item.Status.ContainerStatuses.FirstOrDefault()?.RestartCount.ToString() ?? string.Empty;"
+      - "private static string GetLastRestart(Selectable<V1Pod> item) =>
+            item.Item.Status.ContainerStatuses.FirstOrDefault()?.State.Running.StartedAt.ToAge() ?? string.Empty;"
+  - Title: "Pod Templates"
+    Model: "PodTemplate"
+    Description: "List all Pod Templates"
+    Category: "Core"
+    ListMethod: "GetPodTemplatesAsync"    
+    ItemType: "V1PodTemplate"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get podtemplates"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Priority Classes"
+    Model: "PriorityClass"
+    Description: "List all Priority Classes"
+    Category: "Core"
+    ListMethod: "GetPriorityClassesAsync"    
+    ItemType: "V1PriorityClass"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get priorityclasses"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Value"
+        Expression: "p.Item.Value"
+      - Title: "Default"
+        Expression: "GlobalDefault(p)"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+    ExtraMethods:
+      - 'private static bool GlobalDefault(Selectable<V1PriorityClass> s) => s.Item.GlobalDefault ?? false;'
+  - Title: "Priority Level Configurations"
+    Model: "PriorityLevelConfiguration"
+    Description: "List all Priority Level Configurations"
+    Category: "Core"
+    ListMethod: "GetPriorityLevelConfigurationsAsync"    
+    ItemType: "V1PriorityLevelConfiguration"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get prioritylevelconfigurations"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Type"
+        Expression: "p.Item.Spec.Type"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Replication Controllers"
+    Model: "ReplicationController"
+    Description: "List all Replication Controllers"
+    Category: "Core"
+    ListMethod: "GetReplicationControllersAsync"    
+    ItemType: "V1ReplicationController"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get replicationcontrollers"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Replica Sets"
+    Model: "ReplicaSet"
+    Description: "List all Replica Sets"
+    Category: "Core"
+    ListMethod: "GetReplicaSetsAsync"    
+    ItemType: "V1ReplicaSet"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get replicasets"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Replicas"
+        Expression: "p.Item.Status.Replicas"
+      - Title: "Available Replicas"
+        Expression: "p.Item.Status.AvailableReplicas"
+      - Title: "Ready Replicas"
+        Expression: "p.Item.Status.ReadyReplicas"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Resource Claims"
+    Model: "ResourceClaim"
+    Description: "List all Resource Claims"
+    Category: "Core"
+    ListMethod: "GetResourceClaimsAsync"    
+    ItemType: "V1beta1ResourceClaim"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Resource Claim Templates"
+    Model: "ResourceClaimTeplate"
+    Description: "List all Resource Claim Templates"
+    Category: "Core"
+    ListMethod: "GetResourceClaimTemplatesAsync"    
+    ItemType: "V1beta1ResourceClaimTemplate"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Resource Quotas"
+    Model: "ResourceQuotas"
+    Description: "List all Resource Quotas"
+    Category: "Core"
+    ListMethod: "GetResourceQuotasAsync"    
+    ItemType: "V1ResourceQuota"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Resource Slices"
+    Model: "ResourceSlice"
+    Description: "List all Resource Slices"
+    Category: "Core"
+    ListMethod: "GetResourceSlicesAsync"    
+    ItemType: "V1beta1ResourceSlice"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Role Bindings"
+    Model: "RoleBinding"
+    Description: "List all Role Bindings"
+    Category: "Core"
+    ListMethod: "GetRoleBindingsAsync"    
+    ItemType: "V1RoleBinding"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get rolebindings"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Role"
+        Expression: '$"{p.Item.RoleRef.Kind}/{p.Item.RoleRef.Name}"'
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Roles"
+    Model: "Role"
+    Description: "List all Roles"
+    Category: "Core"
+    ListMethod: "GetRolesAsync"    
+    ItemType: "V1Role"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Runtime Classes"
+    Model: "RuntimeClass"
+    Description: "List all Runtime Classes"
+    Category: "Core"
+    ListMethod: "GetRuntimeClassesAsync"    
+    ItemType: "V1RuntimeClass"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Secrets"
+    Model: "Secret"
+    Description: "List all Secrets"
+    Category: "Core"
+    ListMethod: "GetSecretsAsync"    
+    ItemType: "V1Secret"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get secrets"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Service Accounts"
+    Model: "ServiceAccount"
+    Description: "List all Service Accounts"
+    Category: "Core"
+    ListMethod: "GetServiceAccountsAsync"    
+    ItemType: "V1ServiceAccount"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get serviceaccounts"
+    Fields:
+      - Title: "Namespace"
+        Expression: "p.Item.Metadata.NamespaceProperty"
+        #AllowAutoHideNamespace: true
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Count"
+        Expression: "GetCount(p)"
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+    ExtraMethods:
+        - "private static int GetCount(Selectable<V1ServiceAccount> s) => s.Item.Secrets?.Count ?? 0;"
+  - Title: "Service CIDRS"
+    Model: "ServiceCidrs"
+    Description: "List all Service CIDRS"
+    Category: "Core"
+    ListMethod: "GetServiceCIDRSAsync"    
+    ItemType: "V1beta1ServiceCIDR"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Services"
+    Model: "Service"
+    Description: "List all Services"
+    Category: "Core"
+    ListMethod: "GetServicesAsync"    
+    ItemType: "V1Service"
+    IsNamespaced: true
+    KubeCtlHint: "kubectl get services"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Type"
+        Expression: "p.Item.Spec.Type"
+      - Title: "Cluster IP"
+        Expression: "p.Item.Spec.ClusterIP"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Stateful Sets"
+    Model: "StatefuleSet"
+    Description: "List all Stateful Sets"
+    Category: "Core"
+    ListMethod: "GetStatefulSetsAsync"    
+    ItemType: "V1StatefulSet"
+    IsNamespaced: true
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Storage Classes"
+    Model: "StorageClass"
+    Description: "List all Storage Classes"
+    Category: "Core"
+    ListMethod: "GetStorageClassesAsync"    
+    ItemType: "V1StorageClass"
+    IsNamespaced: false
+    KubeCtlHint: "kubectl get storageclasses"
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "Storage Version Migrations"
+    Model: "StorageVersionMigration"
+    Description: "List all Storage Version Migrations"
+    Category: "Core"
+    ListMethod: "GetStorageVersionMigrationsAsync"    
+    ItemType: "V1alpha1StorageVersionMigration"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Storage Versions"
+    Model: "StorageVersion"
+    Description: "List all Storage Versions"
+    Category: "Core"
+    ListMethod: "GetStorageVersionsAsync"    
+    ItemType: "V1alpha1StorageVersion"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Validating Admission Policies"
+    Model: "ValidatingAdmissionPolicy"
+    Description: "List all Validating Admission Policies"
+    Category: "Core"
+    ListMethod: "GetValidatingAdmissionPoliciesAsync"    
+    ItemType: "V1ValidatingAdmissionPolicy"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Validating Admission Policy Bindings"
+    Model: "ValidatingAdmissionPolicyBinding"
+    Description: "List all Validating Admission Policy Bindings"
+    Category: "Core"
+    ListMethod: "GetValidatingAdmissionPolicyBindingsAsync"    
+    ItemType: "V1ValidatingAdmissionPolicyBinding"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Validating Webhook Configurations"
+    Model: "ValidatingWebhookConfiguration"
+    Description: "List all Validating Webhook Configurations"
+    Category: "Core"
+    ListMethod: "GetValidatingWebhookConfigurationsAsync"    
+    ItemType: "V1ValidatingWebhookConfiguration"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Volume Attachments"
+    Model: "VolumeAttachment"
+    Description: "List all Volume Attachments"
+    Category: "Core"
+    ListMethod: "GetVolumeAttachmentsAsync"    
+    ItemType: "V1VolumeAttachment"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Volume Attributes"
+    Model: "VolumeAttribute"
+    Description: "List all Volume Attributes"
+    Category: "Core"
+    ListMethod: "GetVolumeAttributesClassesAsync"    
+    ItemType: "V1beta1VolumeAttributesClass"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "CSI Drivers"
+    Model: "CsiDriver"
+    Description: "List all CSI Drivers"
+    Category: "Storage"
+    ListMethod: "GetCsiDriversAsync"    
+    ItemType: "V1CSIDriver"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "CSI Nodes"
+    Model: "CsiNode"
+    Description: "List all CSI Nodes"
+    Category: "Storage"
+    ListMethod: "GetCsiNodesAsync"    
+    ItemType: "V1CSINode"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      # - Title: "Drivers"
+      #   Expression: "p.Item.Spec.Drivers.Count"
+      - Title: "Age"
+        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+  - Title: "CSI Storage Capacity"
+    Model: "CsiStorageCapacity"
+    Description: "List all CSI Storage Capacity"
+    Category: "Storage"
+    ListMethod: "GetCsiStorageCapacitiesAsync"    
+    ItemType: "V1CSIStorageCapacity"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  - Title: "Cluster Trust Bundles"
+    Model: "ClusterTrustBundle"
+    Description: "List all Cluster Trust Bundles"
+    Category: "Metadata"
+    ListMethod: "GetClusterTrustBundlesAsync"    
+    ItemType: "V1alpha1ClusterTrustBundle"
+    IsNamespaced: false
+    KubeCtlHint: ""
+    Fields:
+      - Title: "Name"
+        Expression: "p.Item.Metadata.Name"
+        IsDefaultSortColumn: true
+        IsFilterable: true
+      - Title: "Creation Timestamp"
+        Expression: "p.Item.Metadata.CreationTimestamp"
+  # - Title: "API Versions"
+  #    Model: "ApiVersion"
+  #   Description: "List all API Versions"
+  #   Category: "Metadata"
+  #   ListMethod: "GetAPIVersionsAsync"    
+  #   ItemType: "V1APIGroup"
+  #   IsNamespaced: false
+  #   KubeCtlHint: ""
+  #   Fields:
+  #     - Title: "Name"
+  #       Expression: "p.Item.Metadata.Name"
+  #       IsDefaultSortColumn: true
+  #       IsFilterable: true
+  #     - Title: "Creation Timestamp"
+  #       Expression: "p.Item.Metadata.CreationTimestamp"
+  # - Title: "Pod Metrics"
+  #    Model: "PodMetric"
+  #   Description: "List all Pod Metrics"
+  #   Category: "Metadata"
+  #   ListMethod: "GetPodMetricsAsync"    
+  #   ItemType: "k8s.Models.PodMetrics"
+  #   IsNamespaced: false
+  #   KubeCtlHint: ""
+  #   Fields:
+  #     - Title: "Name"
+  #       Expression: "p.Item.Metadata.Name"
+  #       IsDefaultSortColumn: true
+  #       IsFilterable: true
+  #     - Title: "Creation Timestamp"
+  #       Expression: "p.Item.Metadata.CreationTimestamp"
+  # - Title: "Node Metrics"
+  #    Model: "NodeMetric"
+  #   Description: "List all Node Metrics"
+  #   Category: "Metadata"
+  #   ListMethod: "GetNodeMetricsAsync"    
+  #   ItemType: "k8s.Models.NodeMetrics"
+  #   IsNamespaced: false
+  #   KubeCtlHint: ""
+  #   Fields:
+  #     - Title: "Name"
+  #       Expression: "p.Item.Metadata.Name"
+  #       IsDefaultSortColumn: true
+  #       IsFilterable: true
+  #     - Title: "Creation Timestamp"
+  #       Expression: "p.Item.Metadata.CreationTimestamp"
+                                
