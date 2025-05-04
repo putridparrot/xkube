@@ -8,12 +8,33 @@
     <AssemblyName>xkube</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<Antlr4 Update="Kql.g4">
+			<Listener>false</Listener>
+			<CustomToolNamespace>Kql.Generated</CustomToolNamespace>
+		</Antlr4>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<Antlr4UseCSharpGenerator>True</Antlr4UseCSharpGenerator>
+	</PropertyGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Include="KubernetesClient" Version="16.0.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="PutridParrot.Results" Version="1.0.0-alpha" />
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Grammar\Kql.g4" />
+	  <Content Include="Grammar\KqlTokens.g4" />
+	</ItemGroup>
 
 </Project>

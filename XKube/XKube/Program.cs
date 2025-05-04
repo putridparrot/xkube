@@ -21,6 +21,7 @@ app.Configure(config =>
     config.SetApplicationName("xkube");
     config.RegisterGetCommands();
     config.RegisterLogCommands();
+    config.RegisterQueryCommands();
 });
 
 app.Run(args);

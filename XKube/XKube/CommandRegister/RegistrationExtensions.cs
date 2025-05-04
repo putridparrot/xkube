@@ -79,4 +79,9 @@ internal static class RegistrationExtensions
     {
         config.AddCommand<LogCommands>("log");
     }
+
+    public static void RegisterQueryCommands(this IConfigurator config)
+    {
+        config.AddCommand<QueryCommands>("query");
+    }
 }
