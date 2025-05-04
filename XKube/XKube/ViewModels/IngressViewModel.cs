@@ -1,11 +1,11 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace XKube.ViewModels;
 
 public class IngressViewModel
 {
-    [DisplayName("NAME")]
+    [DisplayName("Name")]
     public string Name { get; set; } = string.Empty;
-    [DisplayName("CREATION TIMESTAMP")]
-    public DateTime? CreationTimestamp { get; set; } = null;
+    [DisplayName("Creation Timestamp")]
+    public string CreationTimestamp { get; set; } = string.Empty;
 }

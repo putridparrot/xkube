@@ -1,4 +1,4 @@
-﻿using k8s.Models;
+using k8s.Models;
 using Spectre.Console;
 using XKube.Extensions;
 using XKube.Ui;
@@ -15,13 +15,13 @@ public static class V1ServiceExtensions
     {
         return new ServiceViewModel
         {
-            Name = item.Metadata?.Name ?? string.Empty,
+            Name = item.Metadata.Name ?? string.Empty,
             Namespace = item.Metadata?.NamespaceProperty ?? string.Empty,
             Type = item.Spec.Type ?? string.Empty,
-            ClusterIp = item.Spec.ClusterIP ?? string.Empty,
-            ExternalIp = item.Status.LoadBalancer?.Ingress?.FirstOrDefault()?.Ip ?? string.Empty,
-            Ports = string.Join(",", item.Spec.Ports.Select(p => $"{p.Port}/{p.Protocol}")),
-            Age = item.Metadata?.CreationTimestamp.ToAge()
+            ClusterIP = item.Spec.ClusterIP ?? string.Empty,
+            ExternalIP = item.Status.LoadBalancer?.Ingress?.FirstOrDefault()?.Ip ?? string.Empty,
+            Ports = string.Join(",", item.Spec.Ports.Select(p => $"{p.Port}/{p.Protocol}")) ?? string.Empty,
+            Age = item.Metadata.CreationTimestamp.ToAge() ?? string.Empty
         };
     }
 
@@ -29,11 +29,11 @@ public static class V1ServiceExtensions
     {
         return items.CreateGrid(item =>
         [
-            item.Namespace,
             item.Name,
+            item.Namespace,
             item.Type,
-            item.ClusterIp,
-            item.ExternalIp,
+            item.ClusterIP,
+            item.ExternalIP,
             item.Ports,
             item.Age
         ]);

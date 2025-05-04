@@ -1,0 +1,3 @@
+{{#each this}}
+        list.AddCommand<Get{{Model}}Commands>("{{AsCommandName Title}}");
+{{/each}}

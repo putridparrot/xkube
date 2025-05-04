@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
@@ -8,13 +8,10 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-internal class GetServiceCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetServiceCommands.Settings>
+public class GetDeviceClassCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetDeviceClassCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
-        [CommandOption("-n|--namespace")]
-        [Description("Filter service by namespace")]
-        public string? Namespace { get; set; }
         [CommandOption("-o|--json")]
         [Description("Returns data as a JSON object")]
         public bool Json { get; set; }
@@ -22,7 +19,7 @@ internal class GetServiceCommands(IKubernetesClientService kubernetesClientServi
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var items = await kubernetesClientServices.GetServicesAsync(settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
+        var items = await kubernetesClientServices.GetDeviceClassesAsync();
         if (items is IFailure failure)
         {
             AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");

@@ -10,17 +10,17 @@ Definitions:
     KubeCtlHint: "kubectl api-resources"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Name"
+        Expression: "item.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Version"
-        Expression: "p.Item.Version"
+        Expression: "item.Version"
       - Title: "Namespaced"
-        Expression: "p.Item.Namespaced"
+        Expression: "item.Namespaced.ToString()"
       - Title: "Shortnames"
-        Expression: "p.Item.ShortNames.CsvJoin()"
+        Expression: "item.ShortNames.CsvJoin()"
       - Title: "Kind"
-        Expression: "p.Item.Kind"
+        Expression: "item.Kind"
   - Title: "API Services"
     Model: "ApiService"
     Description: "List all API services"
@@ -31,13 +31,13 @@ Definitions:
     KubeCtlHint: "kubectl get apiservices"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Service"
-        Expression: "p.Item.Status.Conditions[0].Reason"
+        Expression: "item.Status.Conditions[0].Reason"
       - Title: "Available"
-        Expression: "p.Item.Status.Conditions[0].Status"
+        Expression: "item.Status.Conditions[0].Status"
   - Title: "Certificate Signing Requests"
     Model: "CertificateSigningRequest"
     Description: "List all Certificate Signing Requests"
@@ -48,11 +48,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Cluster Role Bindings"
     Model: "ClusterRoleBinding"
     Description: "List all Cluster Role Bindings"
@@ -63,18 +63,18 @@ Definitions:
     KubeCtlHint: "kubectl get clusterrolebindings"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Role"
-        Expression: '$"{p.Item.RoleRef.Kind}/{p.Item.RoleRef.Name}"'
+        Expression: '$"{item.RoleRef.Kind}/{item.RoleRef.Name}"'
       - Title: "Users"
-        Expression: "GetUsers(p)"
+        Expression: "GetUsers(item)"
       - Title: "Groups"
-        Expression: "GetGroups(p)"
+        Expression: "GetGroups(item)"
     ExtraMethods:
-        - "private static string? GetGroups(Selectable<V1ClusterRoleBinding> item) => item.Item.Subjects?.Where(s => s.Kind == \"Group\").Select(g => g.Name).CsvJoin();"
-        - "private static string? GetUsers(Selectable<V1ClusterRoleBinding> item) => item.Item.Subjects?.Where(s => s.Kind == \"User\").Select(g => g.Name).CsvJoin();"
+        - "private static string? GetGroups(V1ClusterRoleBinding item) => item.Subjects?.Where(s => s.Kind == \"Group\").Select(g => g.Name).CsvJoin();"
+        - "private static string? GetUsers(V1ClusterRoleBinding item) => item.Subjects?.Where(s => s.Kind == \"User\").Select(g => g.Name).CsvJoin();"
   - Title: "Cluster Roles"
     Model: "ClusterRole"
     Description: "List all Cluster Role Bindings"
@@ -85,11 +85,11 @@ Definitions:
     KubeCtlHint: "kubectl get clusterroles"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Component Statuses"
     Model: "ComponentStatus"
     Description: "List all Component Statuses"
@@ -100,15 +100,15 @@ Definitions:
     KubeCtlHint: "kubectl get componentstatuses"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Status"
-        Expression: "p.Item.Conditions[0].Status"
-      - Title: "Status"
-        Expression: "p.Item.Conditions[0].Message"
+        Expression: "item.Conditions[0].Status"
+      - Title: "Message"
+        Expression: "item.Conditions[0].Message"
       - Title: "Error"
-        Expression: "p.Item.Conditions[0].Error"
+        Expression: "item.Conditions[0].Error"
   - Title: "Config Maps"
     Model: "ConfigMap"
     Description: "List all Config Maps"
@@ -119,16 +119,16 @@ Definitions:
     KubeCtlHint: "kubectl get configmaps"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Data"
-        Expression: "p.Item.Data.Count"
+        Expression: "item.Data.Count.ToString()"
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Controller Revisions"
     Model: "ControllerRevision"
     Description: "List all Controller Revisions"
@@ -139,16 +139,16 @@ Definitions:
     KubeCtlHint: "kubectl get controllerrevisions"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Controller"
-        Expression: "p.Item.Metadata.OwnerReferences[0].Name"
+        Expression: "item.Metadata.OwnerReferences[0].Name"
       - Title: "Revision"
-        Expression: "p.Item.Revision"
+        Expression: "item.Revision.ToString()"
   - Title: "Cron Jobs"
     Model: "CronJob"
     Description: "List all Cron Jobs"
@@ -159,11 +159,11 @@ Definitions:
     KubeCtlHint: "kubectl get cronjobs"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Custom Resource Definitions"
     Model: "CustomResourceDefinition"
     Description: "List all Custom Resource Definitions"
@@ -174,11 +174,11 @@ Definitions:
     KubeCtlHint: "kubectl get crd"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Daemon Sets"
     Model: "DaemonSet"
     Description: "List all Daemon Sets"
@@ -189,22 +189,22 @@ Definitions:
     KubeCtlHint: "kubectl get ds"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Desired"
-        Expression: "p.Item.Status.DesiredNumberScheduled"
+        Expression: "item.Status.DesiredNumberScheduled.ToString()"
       - Title: "Current"
-        Expression: "p.Item.Status.CurrentNumberScheduled"
+        Expression: "item.Status.CurrentNumberScheduled.ToString()"
       - Title: "Ready"
-        Expression: "p.Item.Status.NumberReady"
+        Expression: "item.Status.NumberReady.ToString()"
       - Title: "Upto date"
-        Expression: "p.Item.Status.UpdatedNumberScheduled"
+        Expression: "item.Status.UpdatedNumberScheduled?.ToString()"
       - Title: "Available"
-        Expression: "p.Item.Status.NumberAvailable"
+        Expression: "item.Status.NumberAvailable.ToString()"
   - Title: "Deployments"
     Model: "Deployment"
     Description: "List all Deployment"
@@ -215,20 +215,20 @@ Definitions:
     KubeCtlHint: "kubectl get deployments"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Ready"
-        Expression: '$"{p.Item.Status.ReadyReplicas}/{p.Item.Status.AvailableReplicas}"'
+        Expression: '$"{item.Status.ReadyReplicas}/{item.Status.AvailableReplicas}"'
       - Title: "Upto date"
-        Expression: "p.Item.Status.UpdatedReplicas"
+        Expression: "item.Status.UpdatedReplicas.ToString()"
       - Title: "Available"
-        Expression: "p.Item.Status.AvailableReplicas"
+        Expression: "item.Status.AvailableReplicas.ToString()"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Device Classes"
     Model: "DeviceClass"
     Description: "List all Device Classes"
@@ -239,11 +239,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Endpoints"
     Model: "Endpoint"
     Description: "List all Endpoints"
@@ -254,18 +254,18 @@ Definitions:
     KubeCtlHint: "kubectl get endpoints"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Endpoints"
-        Expression: "GetEndpointIps(p)"
+        Expression: "GetEndpointIps(item)"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
     ExtraMethods:
-        - "private static string? GetEndpointIps(Selectable<V1Endpoints> item) => item.Item.Subsets is null ? string.Empty : item.Item.Subsets.SelectMany(s => s.Addresses.Select(a => a.Ip)).CsvJoin();"
+        - "private static string? GetEndpointIps(V1Endpoints item) => item.Subsets is null ? string.Empty : item.Subsets.SelectMany(s => s.Addresses.Select(a => a.Ip)).CsvJoin();"
   - Title: "Endpoint Slices"
     Model: "EndpointSlice"
     Description: "List all Endpoint Slices"
@@ -276,20 +276,20 @@ Definitions:
     KubeCtlHint: "kubectl get endpointslices"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Address Type"
-        Expression: "p.Item.AddressType"
+        Expression: "item.AddressType"
       - Title: "Endpoints"
-        Expression: "p.Item.Endpoints.SelectMany(e => e.Addresses).CsvJoin()"
+        Expression: "item.Endpoints.SelectMany(e => e.Addresses).CsvJoin()"
       - Title: "Ports"
-        Expression: "p.Item.Ports.Select(i => i.Port).CsvJoin()"
+        Expression: "item.Ports.Select(i => i.Port).CsvJoin()"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Flow Schemas"
     Model: "FlowSchema"
     Description: "List all Flow Schemas"
@@ -300,17 +300,17 @@ Definitions:
     KubeCtlHint: "kubectl get flowschemas"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Priority Level"
-        Expression: "p.Item.Spec.PriorityLevelConfiguration.Name"
+        Expression: "item.Spec.PriorityLevelConfiguration.Name"
       - Title: "Matching Precedence"
-        Expression: "p.Item.Spec.MatchingPrecedence"
+        Expression: "item.Spec.MatchingPrecedence?.ToString()"
       - Title: "Distinguisher Method"
-        Expression: "DistinguisherMethod(p)"
+        Expression: "DistinguisherMethod(item)"
     ExtraMethods:
-       - "private static string DistinguisherMethod(Selectable<V1FlowSchema> s) => s.Item.Spec.DistinguisherMethod?.Type ?? string.Empty;"
+       - "private static string DistinguisherMethod(V1FlowSchema item) => item.Spec.DistinguisherMethod?.Type ?? string.Empty;"
   - Title: "Horizontal Pod Autoscalers"
     Model: "HorizontalPodAutoscaler"
     Description: "List all Horizontal Pod Autoscalers"
@@ -321,11 +321,11 @@ Definitions:
     KubeCtlHint: "kubectl get hpa"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Ingresses"
     Model: "Ingress"
     Description: "List all Ingresses"
@@ -336,11 +336,11 @@ Definitions:
     KubeCtlHint: "kubectl get ingresses"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Ingress Classes"
     Model: "IngressClass"
     Description: "List all Ingress Classes"
@@ -351,11 +351,11 @@ Definitions:
     KubeCtlHint: "kubectl get ingressclasses"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "IP Addresses"
     Model: "IpAddress"
     Description: "List all IP Addresses"
@@ -366,11 +366,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Jobs"
     Model: "Job"
     Description: "List all Jobs"
@@ -381,11 +381,11 @@ Definitions:
     KubeCtlHint: "kubectl get jobs"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Lease Candidates"
     Model: "LeaseCandidate"
     Description: "List all Lease Candidates"
@@ -396,11 +396,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Leases"
     Model: "Lease"
     Description: "List all Leases"
@@ -411,16 +411,16 @@ Definitions:
     KubeCtlHint: "kubectl get leases"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Holder"
-        Expression: "p.Item.Spec.HolderIdentity"
+        Expression: "item.Spec.HolderIdentity"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Limit Ranges"
     Model: "LimitRange"
     Description: "List all Limit Ranges"
@@ -431,11 +431,11 @@ Definitions:
     KubeCtlHint: "kubectl get limitranges"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Mutating Admission Policies"
     Model: "MutatingAdmissionPolicy"
     Description: "List all Mutating Admission Policies"
@@ -446,11 +446,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Mutating Admission Policy Bindings"
     Model: "MutatingAdmissionPolicyBinding"
     Description: "List all Mutating Admission Policy Bindings"
@@ -461,11 +461,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Mutating Webhook Configurations"
     Model: "MutatingWebhookConfiguration"
     Description: "List all Mutating Webhook Configurations"
@@ -476,11 +476,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Events"
     Model: "Event"
     Description: "List all Events"
@@ -491,17 +491,17 @@ Definitions:
     KubeCtlHint: "kubectl get events"
     Fields:
       - Title: "Type"
-        Expression: "p.Item.Type"
+        Expression: "item.Type"
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Message"
-        Expression: "p.Item.Message"
+        Expression: "item.Message"
       - Title: "Object Name"
-        Expression: "p.Item.InvolvedObject.Name"
+        Expression: "item.InvolvedObject.Name"
       - Title: "Last Timestamp"
-        Expression: "p.Item.LastTimestamp"
+        Expression: "item.LastTimestamp.ToString()"
   - Title: "Namespaces"
     Model: "Namespace"
     Description: "List all Namespaces"
@@ -512,13 +512,13 @@ Definitions:
     KubeCtlHint: "kubectl get namespaces"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Phase"
-        Expression: "p.Item.Status.Phase"
+        Expression: "item.Status.Phase"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Network Policies"
     Model: "NetworkPolicy"
     Description: "List all Network Policies"
@@ -529,11 +529,11 @@ Definitions:
     KubeCtlHint: "kubectl get networkpolicies"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Nodes"
     Model: "Node"
     Description: "List all Nodes"
@@ -544,18 +544,19 @@ Definitions:
     KubeCtlHint: "kubectl get nodes"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Status"
-        Expression: "GetStatus(p)"
+        Expression: "GetStatus(item)"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
       - Title: "Version"
-        Expression: "p.Item.Status.NodeInfo.KubeletVersion"
+        Expression: "item.Status.NodeInfo.KubeletVersion"
     ExtraMethods:
-      - "private static string? GetStatus(Selectable<V1Node> item) => item.Item.Status.Conditions.FirstOrDefault(s => s.Type == \"Ready\")?.Status == \"True\" ? \"Ready\" : string.Empty;"
+      - "private static string? GetStatus(V1Node item) => item.Status.Conditions.FirstOrDefault(s => s.Type == \"Ready\")?.Status == \"True\" ? \"Ready\" : string.Empty;"
   - Title: "Persistent Volume Claims"
+    Model: "PersistentVolumeClaim"
     Description: "List all Persistent Volume Claims"
     Category: "Core"
     ListMethod: "GetPersistentVolumeClaimsAsync"    
@@ -564,11 +565,11 @@ Definitions:
     KubeCtlHint: "kubectl get pvc"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Persistent Volumes"
     Model: "PersistentVolume"
     Description: "List all Persistent Volumes"
@@ -579,11 +580,11 @@ Definitions:
     KubeCtlHint: "kubectl get persistentvolumes"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Pod Disruption Budgets"
     Model: "PodDisruptionBudget"
     Description: "List all Pod Disruption Budgets"
@@ -594,11 +595,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Pods"
     Model: "Pod"
     Description: "List all Pods"
@@ -611,25 +612,25 @@ Definitions:
     KubeCtlHint: "kubectl get pods"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Status"
-        Expression: "p.Item.Status.Phase"
+        Expression: "item.Status.Phase"
       - Title: "Restarts"
-        Expression: "$\"{GetRestarts(p)} ({GetLastRestart(p)})\""
+        Expression: "$\"{GetRestarts(item)} ({GetLastRestart(item)})\""
       - Title: "Pod IP"
-        Expression: "p.Item.Status.PodIP"
+        Expression: "item.Status.PodIP"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
     ExtraMethods:
-      - "private static string GetRestarts(Selectable<V1Pod> item) => 
-            item.Item.Status.ContainerStatuses.FirstOrDefault()?.RestartCount.ToString() ?? string.Empty;"
-      - "private static string GetLastRestart(Selectable<V1Pod> item) =>
-            item.Item.Status.ContainerStatuses.FirstOrDefault()?.State.Running.StartedAt.ToAge() ?? string.Empty;"
+      - "private static string GetRestarts(V1Pod item) => 
+            item.Status.ContainerStatuses.FirstOrDefault()?.RestartCount.ToString() ?? string.Empty;"
+      - "private static string GetLastRestart(V1Pod item) =>
+            item.Status.ContainerStatuses.FirstOrDefault()?.State.Running.StartedAt.ToAge() ?? string.Empty;"
   - Title: "Pod Templates"
     Model: "PodTemplate"
     Description: "List all Pod Templates"
@@ -640,11 +641,11 @@ Definitions:
     KubeCtlHint: "kubectl get podtemplates"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Priority Classes"
     Model: "PriorityClass"
     Description: "List all Priority Classes"
@@ -655,17 +656,17 @@ Definitions:
     KubeCtlHint: "kubectl get priorityclasses"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Value"
-        Expression: "p.Item.Value"
+        Expression: "item.Value.ToString()"
       - Title: "Default"
-        Expression: "GlobalDefault(p)"
+        Expression: "GlobalDefault(item).ToString()"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
     ExtraMethods:
-      - 'private static bool GlobalDefault(Selectable<V1PriorityClass> s) => s.Item.GlobalDefault ?? false;'
+      - 'private static bool GlobalDefault(V1PriorityClass item) => item.GlobalDefault ?? false;'
   - Title: "Priority Level Configurations"
     Model: "PriorityLevelConfiguration"
     Description: "List all Priority Level Configurations"
@@ -676,13 +677,13 @@ Definitions:
     KubeCtlHint: "kubectl get prioritylevelconfigurations"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Type"
-        Expression: "p.Item.Spec.Type"
+        Expression: "item.Spec.Type"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Replication Controllers"
     Model: "ReplicationController"
     Description: "List all Replication Controllers"
@@ -693,11 +694,11 @@ Definitions:
     KubeCtlHint: "kubectl get replicationcontrollers"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Replica Sets"
     Model: "ReplicaSet"
     Description: "List all Replica Sets"
@@ -708,20 +709,20 @@ Definitions:
     KubeCtlHint: "kubectl get replicasets"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Replicas"
-        Expression: "p.Item.Status.Replicas"
+        Expression: "item.Status.Replicas.ToString()"
       - Title: "Available Replicas"
-        Expression: "p.Item.Status.AvailableReplicas"
+        Expression: "item.Status.AvailableReplicas.ToString()"
       - Title: "Ready Replicas"
-        Expression: "p.Item.Status.ReadyReplicas"
+        Expression: "item.Status.ReadyReplicas.ToString()"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Resource Claims"
     Model: "ResourceClaim"
     Description: "List all Resource Claims"
@@ -732,11 +733,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Resource Claim Templates"
     Model: "ResourceClaimTeplate"
     Description: "List all Resource Claim Templates"
@@ -747,11 +748,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Resource Quotas"
     Model: "ResourceQuotas"
     Description: "List all Resource Quotas"
@@ -762,11 +763,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Resource Slices"
     Model: "ResourceSlice"
     Description: "List all Resource Slices"
@@ -777,11 +778,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Role Bindings"
     Model: "RoleBinding"
     Description: "List all Role Bindings"
@@ -792,16 +793,16 @@ Definitions:
     KubeCtlHint: "kubectl get rolebindings"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Role"
-        Expression: '$"{p.Item.RoleRef.Kind}/{p.Item.RoleRef.Name}"'
+        Expression: '$"{item.RoleRef.Kind}/{item.RoleRef.Name}"'
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Roles"
     Model: "Role"
     Description: "List all Roles"
@@ -812,11 +813,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Runtime Classes"
     Model: "RuntimeClass"
     Description: "List all Runtime Classes"
@@ -827,13 +828,13 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Secrets"
     Model: "Secret"
     Description: "List all Secrets"
@@ -844,11 +845,11 @@ Definitions:
     KubeCtlHint: "kubectl get secrets"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Service Accounts"
     Model: "ServiceAccount"
     Description: "List all Service Accounts"
@@ -859,18 +860,18 @@ Definitions:
     KubeCtlHint: "kubectl get serviceaccounts"
     Fields:
       - Title: "Namespace"
-        Expression: "p.Item.Metadata.NamespaceProperty"
+        Expression: "item.Metadata.NamespaceProperty"
         #AllowAutoHideNamespace: true
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Count"
-        Expression: "GetCount(p)"
+        Expression: "GetCount(item).ToString()"
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
     ExtraMethods:
-        - "private static int GetCount(Selectable<V1ServiceAccount> s) => s.Item.Secrets?.Count ?? 0;"
+        - "private static int GetCount(V1ServiceAccount item) => item.Secrets?.Count ?? 0;"
   - Title: "Service CIDRS"
     Model: "ServiceCidrs"
     Description: "List all Service CIDRS"
@@ -881,11 +882,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Services"
     Model: "Service"
     Description: "List all Services"
@@ -896,15 +897,21 @@ Definitions:
     KubeCtlHint: "kubectl get services"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
+      - Title: "Namespace"
+        Expression: "item.Metadata?.NamespaceProperty"
       - Title: "Type"
-        Expression: "p.Item.Spec.Type"
+        Expression: "item.Spec.Type"
       - Title: "Cluster IP"
-        Expression: "p.Item.Spec.ClusterIP"
+        Expression: "item.Spec.ClusterIP"
+      - Title: "External IP"
+        Expression: "item.Status.LoadBalancer?.Ingress?.FirstOrDefault()?.Ip"
+      - Title: "Ports"
+        Expression: 'string.Join(",", item.Spec.Ports.Select(p => $"{p.Port}/{p.Protocol}"))'
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Stateful Sets"
     Model: "StatefuleSet"
     Description: "List all Stateful Sets"
@@ -915,11 +922,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Storage Classes"
     Model: "StorageClass"
     Description: "List all Storage Classes"
@@ -930,11 +937,11 @@ Definitions:
     KubeCtlHint: "kubectl get storageclasses"
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "Storage Version Migrations"
     Model: "StorageVersionMigration"
     Description: "List all Storage Version Migrations"
@@ -945,11 +952,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Storage Versions"
     Model: "StorageVersion"
     Description: "List all Storage Versions"
@@ -960,11 +967,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Validating Admission Policies"
     Model: "ValidatingAdmissionPolicy"
     Description: "List all Validating Admission Policies"
@@ -975,11 +982,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Validating Admission Policy Bindings"
     Model: "ValidatingAdmissionPolicyBinding"
     Description: "List all Validating Admission Policy Bindings"
@@ -990,11 +997,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Validating Webhook Configurations"
     Model: "ValidatingWebhookConfiguration"
     Description: "List all Validating Webhook Configurations"
@@ -1005,11 +1012,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Volume Attachments"
     Model: "VolumeAttachment"
     Description: "List all Volume Attachments"
@@ -1020,11 +1027,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Volume Attributes"
     Model: "VolumeAttribute"
     Description: "List all Volume Attributes"
@@ -1035,11 +1042,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "CSI Drivers"
     Model: "CsiDriver"
     Description: "List all CSI Drivers"
@@ -1050,11 +1057,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "CSI Nodes"
     Model: "CsiNode"
     Description: "List all CSI Nodes"
@@ -1065,13 +1072,13 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       # - Title: "Drivers"
-      #   Expression: "p.Item.Spec.Drivers.Count"
+      #   Expression: "item.Spec.Drivers.Count"
       - Title: "Age"
-        Expression: "p.Item.Metadata.CreationTimestamp.ToAge()"
+        Expression: "item.Metadata.CreationTimestamp.ToAge()"
   - Title: "CSI Storage Capacity"
     Model: "CsiStorageCapacity"
     Description: "List all CSI Storage Capacity"
@@ -1082,11 +1089,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   - Title: "Cluster Trust Bundles"
     Model: "ClusterTrustBundle"
     Description: "List all Cluster Trust Bundles"
@@ -1097,11 +1104,11 @@ Definitions:
     KubeCtlHint: ""
     Fields:
       - Title: "Name"
-        Expression: "p.Item.Metadata.Name"
+        Expression: "item.Metadata.Name"
         IsDefaultSortColumn: true
         IsFilterable: true
       - Title: "Creation Timestamp"
-        Expression: "p.Item.Metadata.CreationTimestamp"
+        Expression: "item.Metadata.CreationTimestamp.ToString()"
   # - Title: "API Versions"
   #    Model: "ApiVersion"
   #   Description: "List all API Versions"
@@ -1112,11 +1119,11 @@ Definitions:
   #   KubeCtlHint: ""
   #   Fields:
   #     - Title: "Name"
-  #       Expression: "p.Item.Metadata.Name"
+  #       Expression: "item.Metadata.Name"
   #       IsDefaultSortColumn: true
   #       IsFilterable: true
   #     - Title: "Creation Timestamp"
-  #       Expression: "p.Item.Metadata.CreationTimestamp"
+  #       Expression: "item.Metadata.CreationTimestamp.ToString()"
   # - Title: "Pod Metrics"
   #    Model: "PodMetric"
   #   Description: "List all Pod Metrics"
@@ -1127,11 +1134,11 @@ Definitions:
   #   KubeCtlHint: ""
   #   Fields:
   #     - Title: "Name"
-  #       Expression: "p.Item.Metadata.Name"
+  #       Expression: "item.Metadata.Name"
   #       IsDefaultSortColumn: true
   #       IsFilterable: true
   #     - Title: "Creation Timestamp"
-  #       Expression: "p.Item.Metadata.CreationTimestamp"
+  #       Expression: "item.Metadata.CreationTimestamp.ToString()"
   # - Title: "Node Metrics"
   #    Model: "NodeMetric"
   #   Description: "List all Node Metrics"
@@ -1142,9 +1149,9 @@ Definitions:
   #   KubeCtlHint: ""
   #   Fields:
   #     - Title: "Name"
-  #       Expression: "p.Item.Metadata.Name"
+  #       Expression: "item.Metadata.Name"
   #       IsDefaultSortColumn: true
   #       IsFilterable: true
   #     - Title: "Creation Timestamp"
-  #       Expression: "p.Item.Metadata.CreationTimestamp"
+  #       Expression: "item.Metadata.CreationTimestamp.ToString() "
                                 

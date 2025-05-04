@@ -1,17 +1,17 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace XKube.ViewModels;
 
 public class ApiResourceViewModel
 {
-    [DisplayName("NAME")]
+    [DisplayName("Name")]
     public string Name { get; set; } = string.Empty;
-    [DisplayName("VERSION")]
+    [DisplayName("Version")]
     public string Version { get; set; } = string.Empty;
-    [DisplayName("NAMESPACED")]
+    [DisplayName("Namespaced")]
     public string Namespaced { get; set; } = string.Empty;
-    [DisplayName("SHORTNAMES")]
+    [DisplayName("Shortnames")]
     public string Shortnames { get; set; } = string.Empty;
-    [DisplayName("KIND")]
+    [DisplayName("Kind")]
     public string Kind { get; set; } = string.Empty;
 }

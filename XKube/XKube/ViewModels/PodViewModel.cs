@@ -1,17 +1,19 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace XKube.ViewModels;
 
 public class PodViewModel
 {
-    [DisplayName("NAME")]
-    public string Name { get; set; } = string.Empty;
-    [DisplayName("NAMESPACE")]
+    [DisplayName("Namespace")]
     public string Namespace { get; set; } = string.Empty;
-    [DisplayName("STATUS")]
+    [DisplayName("Name")]
+    public string Name { get; set; } = string.Empty;
+    [DisplayName("Status")]
     public string Status { get; set; } = string.Empty;
-    [DisplayName("RESTARTS")]
+    [DisplayName("Restarts")]
     public string Restarts { get; set; } = string.Empty;
-    [DisplayName("AGE")]
+    [DisplayName("Pod IP")]
+    public string PodIP { get; set; } = string.Empty;
+    [DisplayName("Age")]
     public string Age { get; set; } = string.Empty;
 }

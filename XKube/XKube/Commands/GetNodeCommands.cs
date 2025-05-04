@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
@@ -8,7 +8,7 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-internal class GetNodeCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetNodeCommands.Settings>
+public class GetNodeCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetNodeCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -38,6 +38,4 @@ internal class GetNodeCommands(IKubernetesClientService kubernetesClientServices
 
         return 0;
     }
-
-
 }

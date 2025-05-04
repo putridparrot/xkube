@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
@@ -8,12 +8,12 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-internal class GetPodCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetPodCommands.Settings>
+public class GetPodCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetPodCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
         [CommandOption("-n|--namespace")]
-        [Description("Filter pods by namespace")]
+        [Description("Filter Pods by namespace")]
         public string? Namespace { get; set; }
         [CommandOption("-o|--json")]
         [Description("Returns data as a JSON object")]
@@ -41,6 +41,4 @@ internal class GetPodCommands(IKubernetesClientService kubernetesClientServices)
 
         return 0;
     }
-
-
 }

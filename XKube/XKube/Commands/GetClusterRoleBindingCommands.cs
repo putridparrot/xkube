@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
@@ -8,7 +8,7 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-internal class GetApiResourcesCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetApiResourcesCommands.Settings>
+public class GetClusterRoleBindingCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetClusterRoleBindingCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -19,7 +19,7 @@ internal class GetApiResourcesCommands(IKubernetesClientService kubernetesClient
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var items = await kubernetesClientServices.GetApiResourcesAsync();
+        var items = await kubernetesClientServices.GetClusterRoleBindingsAsync();
         if (items is IFailure failure)
         {
             AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");

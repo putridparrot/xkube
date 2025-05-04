@@ -1,4 +1,4 @@
-﻿using k8s.Models;
+using k8s.Models;
 using Spectre.Console;
 using XKube.Extensions;
 using XKube.Ui;
@@ -15,11 +15,12 @@ public static class V1PodExtensions
     {
         return new PodViewModel
         {
-            Name = item.Metadata?.Name ?? string.Empty,
-            Namespace = item.Metadata?.NamespaceProperty ?? string.Empty,
-            Status = item.Status?.Phase ?? string.Empty,
-            Restarts = $"{GetRestarts(item)} ({GetLastRestart(item)} ago)",
-            Age = item.Metadata?.CreationTimestamp.ToAge()
+            Namespace = item.Metadata.NamespaceProperty ?? string.Empty,
+            Name = item.Metadata.Name ?? string.Empty,
+            Status = item.Status.Phase ?? string.Empty,
+            Restarts = $"{GetRestarts(item)} ({GetLastRestart(item)})" ?? string.Empty,
+            PodIP = item.Status.PodIP ?? string.Empty,
+            Age = item.Metadata.CreationTimestamp.ToAge() ?? string.Empty
         };
     }
 
@@ -27,16 +28,14 @@ public static class V1PodExtensions
     {
         return items.CreateGrid(item =>
         [
-            item.Name,
             item.Namespace,
-            //string.Empty,
-            $"[green]{item.Status}[/]",
+            item.Name,
+            item.Status,
             item.Restarts,
+            item.PodIP,
             item.Age
         ]);
     }
-
     private static string GetRestarts(V1Pod item) => item.Status.ContainerStatuses.FirstOrDefault()?.RestartCount.ToString() ?? string.Empty;
     private static string GetLastRestart(V1Pod item) => item.Status.ContainerStatuses.FirstOrDefault()?.State.Running.StartedAt.ToAge() ?? string.Empty;
-
 }

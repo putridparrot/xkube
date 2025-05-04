@@ -6,6 +6,6 @@ public class {{Model}}ViewModel
 {
     {{#Fields}}
     [DisplayName("{{Title}}")]
-    public string {{PropertyName Title}} { get; set; } = string.Empty;
+    public string {{AsPropertyName Title}} { get; set; } = string.Empty;
     {{/Fields}}
 }

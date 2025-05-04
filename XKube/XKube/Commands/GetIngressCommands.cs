@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
@@ -8,12 +8,12 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-internal class GetIngressCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetIngressCommands.Settings>
+public class GetIngressCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetIngressCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
         [CommandOption("-n|--namespace")]
-        [Description("Filter service by namespace")]
+        [Description("Filter Ingresses by namespace")]
         public string? Namespace { get; set; }
         [CommandOption("-o|--json")]
         [Description("Returns data as a JSON object")]

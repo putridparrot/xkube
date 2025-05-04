@@ -1,5 +1,6 @@
-﻿using k8s.Models;
+using k8s.Models;
 using Spectre.Console;
+using XKube.Extensions;
 using XKube.Ui;
 using XKube.ViewModels;
 
@@ -14,8 +15,8 @@ public static class V1IngressExtensions
     {
         return new IngressViewModel
         {
-            Name = item.Metadata?.Name ?? string.Empty,
-            CreationTimestamp = item.Metadata.CreationTimestamp
+            Name = item.Metadata.Name ?? string.Empty,
+            CreationTimestamp = item.Metadata.CreationTimestamp.ToString() ?? string.Empty
         };
     }
 
@@ -24,7 +25,7 @@ public static class V1IngressExtensions
         return items.CreateGrid(item =>
         [
             item.Name,
-            item.CreationTimestamp?.ToString() ?? string.Empty
+            item.CreationTimestamp
         ]);
     }
 }

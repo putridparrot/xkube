@@ -1,11 +1,12 @@
-﻿using k8s.Models;
+using k8s.Models;
 using Spectre.Console;
+using XKube.Extensions;
 using XKube.Ui;
 using XKube.ViewModels;
 
 namespace XKube.ViewModelExtensions;
 
-public static class V1ApiResourcesExtensions
+public static class V1APIResourceExtensions
 {
     public static ICollection<ApiResourceViewModel> ToViewModel(this V1APIResourceList list) =>
         list.Resources.Select(item => item.ToViewModel()).ToArray();
@@ -16,8 +17,8 @@ public static class V1ApiResourcesExtensions
         {
             Name = item.Name ?? string.Empty,
             Version = item.Version ?? string.Empty,
-            Namespaced = item.Namespaced.ToString(),
-            Shortnames = string.Join(",", item.ShortNames ?? Array.Empty<string>()),
+            Namespaced = item.Namespaced.ToString() ?? string.Empty,
+            Shortnames = item.ShortNames.CsvJoin() ?? string.Empty,
             Kind = item.Kind ?? string.Empty
         };
     }
@@ -27,10 +28,10 @@ public static class V1ApiResourcesExtensions
         return items.CreateGrid(item =>
         [
             item.Name,
-                item.Version,
-                item.Namespaced,
-                item.Shortnames,
-                item.Kind
+            item.Version,
+            item.Namespaced,
+            item.Shortnames,
+            item.Kind
         ]);
     }
 }

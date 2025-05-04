@@ -4,7 +4,7 @@ using PutridParrot.Results;
 
 namespace XKube.Services;
 
-internal interface IKubernetesClientService
+public interface IKubernetesClientService
 {
     void LoadKubeConfig(string? configLocation = null);
     void LoadConfig(string? configLocation, string? context);

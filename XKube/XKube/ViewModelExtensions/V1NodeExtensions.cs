@@ -1,4 +1,4 @@
-﻿using k8s.Models;
+using k8s.Models;
 using Spectre.Console;
 using XKube.Extensions;
 using XKube.Ui;
@@ -15,9 +15,10 @@ public static class V1NodeExtensions
     {
         return new NodeViewModel
         {
-            Name = item.Metadata?.Name ?? string.Empty,
-            Status = item.Status?.Phase ?? string.Empty,
-            Age = item.Metadata?.CreationTimestamp.ToAge()
+            Name = item.Metadata.Name ?? string.Empty,
+            Status = GetStatus(item) ?? string.Empty,
+            Age = item.Metadata.CreationTimestamp.ToAge() ?? string.Empty,
+            Version = item.Status.NodeInfo.KubeletVersion ?? string.Empty
         };
     }
 
@@ -26,9 +27,10 @@ public static class V1NodeExtensions
         return items.CreateGrid(item =>
         [
             item.Name,
-            $"[green]{item.Status}[/]",
+            item.Status,
             item.Age,
             item.Version
         ]);
     }
+    private static string? GetStatus(V1Node item) => item.Status.Conditions.FirstOrDefault(s => s.Type == "Ready")?.Status == "True" ? "Ready" : string.Empty;
 }
