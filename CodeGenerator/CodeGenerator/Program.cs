@@ -90,3 +90,16 @@ Directory.CreateDirectory(commandRegistrationFolder);
 var orderedDefinitions = operations.Definitions.OrderBy(d => d.Title).ToArray();
 var commands = commandRegistrationTemplate(orderedDefinitions);
 File.WriteAllText(Path.Combine(commandRegistrationFolder, "Commands.cs"), commands);
+
+
+// table creation
+
+var tablesTemplate = Handlebars.Compile(File.ReadAllText(Path.Combine(root, "querytables.template")));
+
+var tablesFolder = Path.Combine(outputFolder, "Query");
+
+Directory.CreateDirectory(tablesFolder);
+
+var tableDefinitions = operations.Definitions.OrderBy(d => d.Title).ToArray();
+var tables = tablesTemplate(tableDefinitions);
+File.WriteAllText(Path.Combine(tablesFolder, "QueryTables.cs"), tables);

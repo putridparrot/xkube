@@ -25,7 +25,13 @@ internal class QueryCommands(IKubernetesClientService kubernetesClientServices) 
             return Task.FromResult(1);
         }
 
-        var result = Query.Parse(settings.Query);
+        //var result = Query.Parse(settings.Query);
+        var result = Query.ExecQuery(settings.Query);
+        if (result is Failure failure)
+        {
+            AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");
+            return Task.FromResult(1);
+        }
 
         return Task.FromResult(0);
     }

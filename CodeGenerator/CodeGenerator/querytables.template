@@ -1,0 +1,3 @@
+{{#each this}}
+        GetTable<{{Model}}ViewModel>("{{AsCommandName Title}}"){{#unless @last}},{{/unless}}
+{{/each}}
