@@ -8,7 +8,7 @@ using XKube.ViewModelExtensions;
 
 namespace XKube.Commands;
 
-public class GetDeviceClassCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetDeviceClassCommands.Settings>
+public class GetClusterCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetClusterCommands.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -19,7 +19,7 @@ public class GetDeviceClassCommands(IKubernetesClientService kubernetesClientSer
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var items = await kubernetesClientServices.GetDeviceClassesAsync();
+        var items = await kubernetesClientServices.GetV1ClustersAsync();
         if (items is IFailure failure)
         {
             AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");

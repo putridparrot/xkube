@@ -1,4 +1,4 @@
-﻿namespace XKube.Services;
+﻿namespace k8s.Models;
 
 /// <summary>
 /// Used to allow the clusters to be displayed like any other resource
@@ -10,4 +10,9 @@ public class V1Cluster
     public string? Cluster { get; set; }
     public string? AuthInfo { get; set; }
     public string? Namespace { get; set; }
+}
+
+public class V1ClusterList
+{
+    public IList<V1Cluster> Items { get; set; }
 }

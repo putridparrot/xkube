@@ -18,8 +18,8 @@ public class GetPodCommands(IKubernetesClientService kubernetesClientServices) :
         [CommandOption("-a|--all-namespaces")]
         [Description("Show across all namespaces")]
         public bool AllNamespaces { get; set; } = false;
-        [CommandOption("-o|--output <Format>")]
-        [Description("Returns data as a JSON object")]
+        [CommandOption("-o|--output")]
+        [Description("Returns data in the specified format")]
         public OutputFormat Output { get; set; }
     }
 

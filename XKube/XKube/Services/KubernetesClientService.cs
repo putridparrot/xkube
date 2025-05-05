@@ -56,16 +56,26 @@ internal class KubernetesClientService : IKubernetesClientService
         return Task.FromResult(_k8SConfiguration?.Clusters.ToList() ?? []);
     }
 
-    public Task<List<V1Cluster>> GetV1ClustersAsync()
+    public async Task<IResult<V1ClusterList>> GetV1ClustersAsync()
     {
-        return Task.FromResult(_k8SConfiguration?.Clusters.Select(c => new V1Cluster
+        // TODO: Current needs setting also namespace
+        var contexts = ClustersConfiguration.Contexts;
+        var currentContext = CurrentContext;
+        var namespaces = await GetNamespacesAsync();
+
+        var clusterList = new V1ClusterList
         {
-            //Current = c,
-            Name = c.Name,
-            AuthInfo = c.ClusterEndpoint.CertificateAuthority,
-            Cluster = c.ClusterEndpoint.Server,
-            //Namespace = c..FirstOrDefault()?.Namespace
-        }).ToList() ?? []);
+            Items = _k8SConfiguration.Clusters.Select(c => new V1Cluster
+            {
+                Current = c.Name == currentContext,
+                Name = c.Name,
+                AuthInfo = c.ClusterEndpoint.CertificateAuthority,
+                Cluster = c.ClusterEndpoint.Server,
+                Namespace = contexts.FirstOrDefault(ctx => ctx.Name == c.Name)?.ContextDetails.Namespace
+            }).ToList()
+        };
+
+        return Result.Success(clusterList);
     }
 
     public async Task<IResult<V1PodList>> GetPodsAsync(string? nameSpace = null, bool? watch = null)

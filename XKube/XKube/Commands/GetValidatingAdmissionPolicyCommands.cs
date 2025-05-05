@@ -12,9 +12,9 @@ public class GetValidatingAdmissionPolicyCommands(IKubernetesClientService kuber
 {
     public sealed class Settings : CommandSettings
     {
-        [CommandOption("-o|--json")]
-        [Description("Returns data as a JSON object")]
-        public bool Json { get; set; }
+        [CommandOption("-o|--output")]
+        [Description("Returns data in the specified format")]
+        public OutputFormat Output { get; set; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
@@ -27,7 +27,7 @@ public class GetValidatingAdmissionPolicyCommands(IKubernetesClientService kuber
         }
 
         var list = items.Value.ToViewModel();
-        if (settings.Json)
+        if (settings.Output == OutputFormat.Json)
         {
             Console.Write(JsonSerializer.Serialize(list));
         }

@@ -11,6 +11,7 @@ internal static class RegistrationExtensions
             list.AddCommand<GetApiResourceCommands>("apiresources");
             list.AddCommand<GetApiServiceCommands>("apiservices");
             list.AddCommand<GetCertificateSigningRequestCommands>("certificatesigningrequests");
+            list.AddCommand<GetClusterCommands>("clusters");
             list.AddCommand<GetClusterRoleBindingCommands>("clusterrolebindings");
             list.AddCommand<GetClusterRoleCommands>("clusterroles");
             list.AddCommand<GetClusterTrustBundleCommands>("clustertrustbundles");

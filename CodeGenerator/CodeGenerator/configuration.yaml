@@ -1,4 +1,24 @@
 Definitions:
+  - Title: "Clusters"
+    Model: "Cluster"
+    Description: "List all cluster"
+    Category: "Core"
+    ListMethod: "GetV1ClustersAsync"
+    ItemType: "V1Cluster"
+    IsNamespaced: false
+    Fields:
+      - Title: "Current"
+        Expression: "item.Current.ToString()"
+        IsDefaultSortColumn: true
+      - Title: "Name"
+        Expression: "item.Name"
+        IsFilterable: true
+      - Title: "Cluster"
+        Expression: "item.Cluster"
+      - Title: "Auth Info"
+        Expression: "item.AuthInfo"
+      - Title: "Namespace"
+        Expression: "item.Namespace"
   - Title: "API Resources"
     Model: "ApiResource"
     Description: "List all API resources"

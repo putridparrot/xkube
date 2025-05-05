@@ -33,4 +33,9 @@ We can use JSON from Powershell using code such as
 * .\xkube get nodes
 * .\xkube get services
 
+### Query Command
+
+```
+./xkube query 'pods | where * contains "etcd"'
+```
 

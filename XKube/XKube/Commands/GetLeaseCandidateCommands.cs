@@ -15,14 +15,17 @@ public class GetLeaseCandidateCommands(IKubernetesClientService kubernetesClient
         [CommandOption("-n|--namespace")]
         [Description("Filter Lease Candidates by namespace")]
         public string? Namespace { get; set; }
-        [CommandOption("-o|--json")]
-        [Description("Returns data as a JSON object")]
-        public bool Json { get; set; }
+        [CommandOption("-a|--all-namespaces")]
+        [Description("Show across all namespaces")]
+        public bool AllNamespaces { get; set; } = false;
+        [CommandOption("-o|--output")]
+        [Description("Returns data in the specified format")]
+        public OutputFormat Output { get; set; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var items = await kubernetesClientServices.GetLeaseCandidatesAsync(settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
+        var items = await kubernetesClientServices.GetLeaseCandidatesAsync(settings.AllNamespaces ? null : settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
         if (items is IFailure failure)
         {
             AnsiConsole.MarkupLine($"[red]Error: {failure.FailureMessage()}[/]");
@@ -30,7 +33,7 @@ public class GetLeaseCandidateCommands(IKubernetesClientService kubernetesClient
         }
 
         var list = items.Value.ToViewModel();
-        if (settings.Json)
+        if (settings.Output == OutputFormat.Json)
         {
             Console.Write(JsonSerializer.Serialize(list));
         }

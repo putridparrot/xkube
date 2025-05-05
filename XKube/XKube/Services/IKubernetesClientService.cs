@@ -17,6 +17,8 @@ public interface IKubernetesClientService
     Task<string[]> GetNamespaceNamesAsync();
 
     Task<List<Cluster>> GetClustersAsync();
+
+    Task<IResult<V1ClusterList>> GetV1ClustersAsync();
     Task<IResult<V1PodList>> GetPodsAsync(string? nameSpace = null, bool? watch = null);
     Task<IResult<V1ConfigMapList>> GetConfigMapsAsync(string? nameSpace = null);
     Task<IResult<V1DaemonSetList>> GetDaemonSetsAsync(string? nameSpace = null);

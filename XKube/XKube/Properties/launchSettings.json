@@ -7,6 +7,10 @@
     "Get Pods": {
       "commandName": "Project",
       "commandLineArgs": "get pods"
+    },
+    "Get Clusters": {
+      "commandName": "Project",
+      "commandLineArgs": "get clusters"
     }
   }
 }

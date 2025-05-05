@@ -16,16 +16,19 @@ public class Get{{Model}}Commands(IKubernetesClientService kubernetesClientServi
         [CommandOption("-n|--namespace")]
         [Description("Filter {{Title}} by namespace")]
         public string? Namespace { get; set; }
+        [CommandOption("-a|--all-namespaces")]
+        [Description("Show across all namespaces")]
+        public bool AllNamespaces { get; set; } = false;
         {{/if}}
-        [CommandOption("-o|--json")]
-        [Description("Returns data as a JSON object")]
-        public bool Json { get; set; }
+        [CommandOption("-o|--output")]
+        [Description("Returns data in the specified format")]
+        public OutputFormat Output { get; set; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         {{#if IsNamespaced}}
-        var items = await kubernetesClientServices.{{ListMethod}}(settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
+        var items = await kubernetesClientServices.{{ListMethod}}(settings.AllNamespaces ? null : settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
         {{else}}
         var items = await kubernetesClientServices.{{ListMethod}}();
         {{/if}}
@@ -36,7 +39,7 @@ public class Get{{Model}}Commands(IKubernetesClientService kubernetesClientServi
         }
 
         var list = items.Value.ToViewModel();
-        if (settings.Json)
+        if (settings.Output == OutputFormat.Json)
         {
             Console.Write(JsonSerializer.Serialize(list));
         }
