@@ -1,8 +1,7 @@
-using System.ComponentModel;
-using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using XKube.Commands.Shared;
 using XKube.Services;
 using XKube.ViewModelExtensions;
 
@@ -10,21 +9,15 @@ namespace XKube.Commands;
 
 public class GetLeaseCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetLeaseCommands.Settings>
 {
-    public sealed class Settings : CommandSettings
-    {
-        [CommandOption("-n|--namespace")]
-        [Description("Filter Leases by namespace")]
-        public string? Namespace { get; set; }
-        [CommandOption("-a|--all-namespaces")]
-        [Description("Show across all namespaces")]
-        public bool AllNamespaces { get; set; } = false;
-        [CommandOption("-o|--output")]
-        [Description("Returns data in the specified format")]
-        public OutputFormat Output { get; set; }
-    }
+    public sealed class Settings : NamespaceCommandSettings;
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        if (!string.IsNullOrEmpty(settings.Cluster))
+        {
+            kubernetesClientServices.LoadConfig(null, settings.Cluster, null);
+        }
+
         var items = await kubernetesClientServices.GetLeasesAsync(settings.AllNamespaces ? null : settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
         if (items is IFailure failure)
         {
@@ -33,14 +26,7 @@ public class GetLeaseCommands(IKubernetesClientService kubernetesClientServices)
         }
 
         var list = items.Value.ToViewModel();
-        if (settings.Output == OutputFormat.Json)
-        {
-            Console.Write(JsonSerializer.Serialize(list));
-        }
-        else
-        {
-            AnsiConsole.Write(list.ToGrid());
-        }
+        list.Write(settings.Output, models => models.ToGrid());
 
         return 0;
     }

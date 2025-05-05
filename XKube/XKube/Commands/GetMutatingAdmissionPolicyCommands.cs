@@ -1,8 +1,7 @@
-using System.ComponentModel;
-using System.Text.Json;
 using PutridParrot.Results;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using XKube.Commands.Shared;
 using XKube.Services;
 using XKube.ViewModelExtensions;
 
@@ -10,15 +9,15 @@ namespace XKube.Commands;
 
 public class GetMutatingAdmissionPolicyCommands(IKubernetesClientService kubernetesClientServices) : AsyncCommand<GetMutatingAdmissionPolicyCommands.Settings>
 {
-    public sealed class Settings : CommandSettings
-    {
-        [CommandOption("-o|--output")]
-        [Description("Returns data in the specified format")]
-        public OutputFormat Output { get; set; }
-    }
+    public sealed class Settings : OutputCommandSettings;
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        if (!string.IsNullOrEmpty(settings.Cluster))
+        {
+            kubernetesClientServices.LoadConfig(null, settings.Cluster, null);
+        }
+
         var items = await kubernetesClientServices.GetMutatingAdmissionPoliciesAsync();
         if (items is IFailure failure)
         {
@@ -27,14 +26,7 @@ public class GetMutatingAdmissionPolicyCommands(IKubernetesClientService kuberne
         }
 
         var list = items.Value.ToViewModel();
-        if (settings.Output == OutputFormat.Json)
-        {
-            Console.Write(JsonSerializer.Serialize(list));
-        }
-        else
-        {
-            AnsiConsole.Write(list.ToGrid());
-        }
+        list.Write(settings.Output, models => models.ToGrid());
 
         return 0;
     }

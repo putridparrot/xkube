@@ -6,7 +6,7 @@
     },
     "Get Pods": {
       "commandName": "Project",
-      "commandLineArgs": "get pods"
+      "commandLineArgs": "get pods -c test-aks -a"
     },
     "Get Clusters": {
       "commandName": "Project",
