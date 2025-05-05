@@ -24,6 +24,8 @@
 
 	<ItemGroup>
     <PackageReference Include="KubernetesClient" Version="16.0.7" />
+    <PackageReference Include="KustoLoco.Core" Version="1.2.1" />
+    <PackageReference Include="KustoLoco.Rendering.ScottPlot" Version="1.2.1" />
     <PackageReference Include="Microsoft.Azure.Kusto.Language" Version="11.7.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="PutridParrot.Results" Version="1.0.0-alpha" />

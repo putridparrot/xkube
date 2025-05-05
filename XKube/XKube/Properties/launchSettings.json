@@ -2,7 +2,11 @@
   "profiles": {
     "Query": {
       "commandName": "Project",
-      "commandLineArgs": "query \"pods | where * contains 'etcd'\""
+      "commandLineArgs": "query \"pods | where Name contains 'etcd'\""
+    },
+    "Query2": {
+      "commandName": "Project",
+      "commandLineArgs": "query \"pods | union deployments | where Namespace contains 'kube-system'\""
     },
     "Get Pods": {
       "commandName": "Project",

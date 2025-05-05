@@ -35,7 +35,10 @@ We can use JSON from Powershell using code such as
 
 ### Query Command
 
+This is very much in the early stages of development. It appears union and * are note supported, so may need to create our own version of the eva
+
 ```
-./xkube query 'pods | where * contains "etcd"'
+./xkube query "pods | where Name contains 'etc' or Name contains 'vpn'"
+./xkube query "pods | union deployments | where Namespace contains 'kube-system'"
 ```
 
