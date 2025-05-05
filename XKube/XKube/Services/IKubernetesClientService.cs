@@ -10,10 +10,9 @@ public interface IKubernetesClientService
     void LoadConfig(string? configLocation, string? context);
     void LoadConfig(string? configLocation, string? context, string? ns);
     string CurrentContext { get; }
-    K8SConfiguration? GetClustersConfiguration();
+    K8SConfiguration? ClustersConfiguration { get; }
 
-    void SetNamespace(string? ns = null);
-    string CurrentNamespace { get; }
+    string CurrentNamespace { get; set; }
 
     Task<string[]> GetNamespaceNamesAsync();
 

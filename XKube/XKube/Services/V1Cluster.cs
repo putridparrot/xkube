@@ -1,0 +1,13 @@
+﻿namespace XKube.Services;
+
+/// <summary>
+/// Used to allow the clusters to be displayed like any other resource
+/// </summary>
+public class V1Cluster
+{
+    public bool Current { get; set; }
+    public string? Name{ get; set; }
+    public string? Cluster { get; set; }
+    public string? AuthInfo { get; set; }
+    public string? Namespace { get; set; }
+}

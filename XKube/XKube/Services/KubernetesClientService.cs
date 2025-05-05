@@ -20,31 +20,52 @@ internal class KubernetesClientService : IKubernetesClientService
 
     public void LoadConfig(string? configLocation, string? context)
     {
-        _kubernetesClientConfiguration = KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
+        _kubernetesClientConfiguration =
+            KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
+        _kubernetesClientConfiguration.Namespace = "default";
         _kubernetes = new Kubernetes(_kubernetesClientConfiguration);
     }
 
     public void LoadConfig(string? configLocation, string? context, string? ns)
     {
-        _kubernetesClientConfiguration = KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
-        _kubernetesClientConfiguration.Namespace = ns;
-        _kubernetes = new Kubernetes(_kubernetesClientConfiguration);
-    }
-
-    public void SetNamespace(string? ns = null)
-    {
+        _kubernetesClientConfiguration =
+            KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
         _kubernetesClientConfiguration.Namespace = ns;
         _kubernetes = new Kubernetes(_kubernetesClientConfiguration);
     }
 
     public string CurrentContext => _kubernetesClientConfiguration?.CurrentContext ?? string.Empty;
-    public string CurrentNamespace => _kubernetesClientConfiguration?.Namespace ?? string.Empty;
 
-    public K8SConfiguration? GetClustersConfiguration() => _k8SConfiguration;
+    public string CurrentNamespace 
+    { 
+        get => _kubernetesClientConfiguration?.Namespace ?? string.Empty;
+        set 
+        {
+            if (_kubernetesClientConfiguration.Namespace != value)
+            {
+                _kubernetesClientConfiguration.Namespace = value;
+                _kubernetes = new Kubernetes(_kubernetesClientConfiguration);
+            }
+        }
+    }
+
+    public K8SConfiguration? ClustersConfiguration => _k8SConfiguration;
 
     public Task<List<Cluster>> GetClustersAsync()
     {
         return Task.FromResult(_k8SConfiguration?.Clusters.ToList() ?? []);
+    }
+
+    public Task<List<V1Cluster>> GetV1ClustersAsync()
+    {
+        return Task.FromResult(_k8SConfiguration?.Clusters.Select(c => new V1Cluster
+        {
+            //Current = c,
+            Name = c.Name,
+            AuthInfo = c.ClusterEndpoint.CertificateAuthority,
+            Cluster = c.ClusterEndpoint.Server,
+            //Namespace = c..FirstOrDefault()?.Namespace
+        }).ToList() ?? []);
     }
 
     public async Task<IResult<V1PodList>> GetPodsAsync(string? nameSpace = null, bool? watch = null)

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Text;
 using Kusto.Language;
 using Kusto.Language.Symbols;
 using Kusto.Language.Syntax;
@@ -20,7 +19,9 @@ public static class Query
         }
 
         //var dbColumns = GetDatabaseTableColumns(code);
+#if DEBUG
         var columns = GetDatabaseTables(code);
+#endif
 
         //var table = code.Globals.GetTable(column);
         //var database = code.Globals.GetDatabase(table);
@@ -124,8 +125,8 @@ public static class Query
     {
         return
         [
-            new FunctionSymbol("RunningPods", "{ pods | where Status == \"Running\"; }"),
-            new FunctionSymbol("FailingPods", "{ pods | where Status != \"Running\"; }") // TBC
+            new FunctionSymbol("RunningPods", "{ pods | where Status == \"Running\"; }"), // TBC
+            new FunctionSymbol("FailingPods", "{ pods | where Status != \"Running\"; }")  // TBC
         ];
     }
 

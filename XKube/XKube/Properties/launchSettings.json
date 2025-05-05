@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "xkube": {
+    "Query": {
       "commandName": "Project",
       "commandLineArgs": "query \"pods | where * contains 'etcd'\""
+    },
+    "Get Pods": {
+      "commandName": "Project",
+      "commandLineArgs": "get pods"
     }
   }
 }
