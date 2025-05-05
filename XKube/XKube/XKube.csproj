@@ -12,17 +12,6 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Antlr4 Update="Kql.g4">
-			<Listener>false</Listener>
-			<CustomToolNamespace>Kql.Generated</CustomToolNamespace>
-		</Antlr4>
-	</ItemGroup>
-
-	<PropertyGroup>
-		<Antlr4UseCSharpGenerator>True</Antlr4UseCSharpGenerator>
-	</PropertyGroup>
-
-	<ItemGroup>
     <PackageReference Include="KubernetesClient" Version="16.0.7" />
     <PackageReference Include="KustoLoco.Core" Version="1.2.1" />
     <PackageReference Include="KustoLoco.Rendering.ScottPlot" Version="1.2.1" />

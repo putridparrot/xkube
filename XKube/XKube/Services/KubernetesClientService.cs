@@ -56,7 +56,7 @@ internal class KubernetesClientService : IKubernetesClientService
         return Task.FromResult(_k8SConfiguration?.Clusters.ToList() ?? []);
     }
 
-    private async Task<IResult<IList<ClusterContext>>> GetClusterContextsAsync()
+    private Task<IResult<IList<ClusterContext>>> GetClusterContextsAsync()
     {
         var contexts = ClustersConfiguration.Contexts;
         var clusters = _k8SConfiguration.Clusters;
@@ -66,7 +66,7 @@ internal class KubernetesClientService : IKubernetesClientService
             return new ClusterContext(cluster, c);
         }).ToList();
 
-        return Result.Success(clusterContexts);
+        return Task.FromResult<IResult<IList<ClusterContext>>>(Result.Success(clusterContexts));
     }
 
 
