@@ -8,6 +8,14 @@
       "commandName": "Project",
       "commandLineArgs": "query \"pods | union deployments | where Namespace contains 'kube-system'\""
     },
+    "Query3": {
+      "commandName": "Project",
+      "commandLineArgs": "query \"pods | where Namespace contains 'kube-system' | count\""
+    },
+    "Query4": {
+      "commandName": "Project",
+      "commandLineArgs": "query \"pods | summarize count() by Name | render piechart\""
+    },
     "Get Pods": {
       "commandName": "Project",
       "commandLineArgs": "get pods -c test-aks -a"

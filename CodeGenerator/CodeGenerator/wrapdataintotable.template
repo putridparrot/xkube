@@ -1,0 +1,4 @@
+{{#each this}}
+        ctx.WrapDataIntoTable("{{AsCommandName Title}}",
+            (await kubernetesClientServices.{{ListMethod}}()).Value.ToViewModel().ToImmutableArray());
+{{/each}}

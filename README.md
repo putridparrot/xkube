@@ -40,5 +40,7 @@ This is very much in the early stages of development. It appears union and * are
 ```
 ./xkube query "pods | where Name contains 'etc' or Name contains 'vpn'"
 ./xkube query "pods | union deployments | where Namespace contains 'kube-system'"
+./xkube query "pods | summarize count() by Name | render piechart"
+./xkube query "union services, pods"
 ```
 

@@ -103,3 +103,15 @@ Directory.CreateDirectory(tablesFolder);
 var tableDefinitions = operations.Definitions.OrderBy(d => d.Title).ToArray();
 var tables = tablesTemplate(tableDefinitions);
 File.WriteAllText(Path.Combine(tablesFolder, "QueryTables.cs"), tables);
+
+// wrapdataintotable registration
+
+var wrapdataIntoTableTemplate = Handlebars.Compile(File.ReadAllText(Path.Combine(root, "wrapdataintotable.template")));
+
+var wrapdataIntoTableFolder = Path.Combine(outputFolder, "WrapdataIntoTable");
+
+Directory.CreateDirectory(wrapdataIntoTableFolder);
+
+var wrapdataIntoTableDefinitions = operations.Definitions.OrderBy(d => d.Title).ToArray();
+var wrapdataIntoTable = wrapdataIntoTableTemplate(wrapdataIntoTableDefinitions);
+File.WriteAllText(Path.Combine(wrapdataIntoTableFolder, "WrapdataIntoTable.cs"), wrapdataIntoTable);
