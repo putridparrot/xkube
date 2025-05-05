@@ -32,3 +32,17 @@ internal class LogCommands(IKubernetesClientService kubernetesClientServices) : 
         return 0;
     }
 }
+
+
+internal class VersionCommands : Command<VersionCommands.Settings>
+{
+    public sealed class Settings : CommandSettings
+    {
+    }
+
+    public override int Execute(CommandContext context, Settings settings)
+    {
+        AnsiConsole.MarkupLine("[white]XKube Version 0.1.0[/]");
+        return 0;
+    }
+}

@@ -56,22 +56,39 @@ internal class KubernetesClientService : IKubernetesClientService
         return Task.FromResult(_k8SConfiguration?.Clusters.ToList() ?? []);
     }
 
+    private async Task<IResult<IList<ClusterContext>>> GetClusterContextsAsync()
+    {
+        var contexts = ClustersConfiguration.Contexts;
+        var clusters = _k8SConfiguration.Clusters;
+        var clusterContexts = contexts.Select(c =>
+        {
+            var cluster = clusters.FirstOrDefault(x => x.Name == c.ContextDetails.Cluster);
+            return new ClusterContext(cluster, c);
+        }).ToList();
+
+        return Result.Success(clusterContexts);
+    }
+
+
     public async Task<IResult<V1ClusterList>> GetV1ClustersAsync()
     {
-        // TODO: Current needs setting also namespace
-        var contexts = ClustersConfiguration.Contexts;
+        var clusterContexts = await GetClusterContextsAsync();
+        if (clusterContexts.IsFailure())
+        {
+            return Result.Failure(new V1ClusterList([]));
+        }
+
         var currentContext = CurrentContext;
-        var namespaces = await GetNamespacesAsync();
 
         var clusterList = new V1ClusterList
         {
-            Items = _k8SConfiguration.Clusters.Select(c => new V1Cluster
+            Items = clusterContexts.Value.Select(c => new V1Cluster
             {
-                Current = c.Name == currentContext,
-                Name = c.Name,
-                AuthInfo = c.ClusterEndpoint.CertificateAuthority,
-                Cluster = c.ClusterEndpoint.Server,
-                Namespace = contexts.FirstOrDefault(ctx => ctx.Name == c.Name)?.ContextDetails.Namespace
+                Current = c.Cluster.Name == currentContext,
+                Name = c.Cluster.Name,
+                AuthInfo = c.Context.ContextDetails.User,
+                Cluster = c.Context.ContextDetails.Cluster,
+                Namespace = c.Context.ContextDetails.Namespace
             }).ToList()
         };
 

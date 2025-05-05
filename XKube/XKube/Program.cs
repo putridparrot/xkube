@@ -19,6 +19,7 @@ var app = new CommandApp(typeRegistrar);
 app.Configure(config =>
 {
     config.SetApplicationName("xkube");
+    config.UseAssemblyInformationalVersion();
     config.RegisterGetCommands();
     config.RegisterLogCommands();
     config.RegisterQueryCommands();

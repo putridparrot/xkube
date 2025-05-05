@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>xkube</AssemblyName>
+	<AssemblyVersion>0.1.0.0</AssemblyVersion>
+	<FileVersion>$(AssemblyVersion)</FileVersion>
+	<Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -20,11 +23,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Include="KubernetesClient" Version="16.0.7" />
     <PackageReference Include="Microsoft.Azure.Kusto.Language" Version="11.7.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
