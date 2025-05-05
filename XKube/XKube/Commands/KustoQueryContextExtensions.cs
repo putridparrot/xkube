@@ -7,7 +7,7 @@ namespace XKube.Commands;
 
 public static class KustoQueryContextExtensions
 {
-    public static async Task RegisterTables(this KustoQueryContext ctx, IKubernetesClientService kubernetesClientServices)
+    public static async Task RegisterTables(this KustoQueryContext ctx, IKubernetesClientService kubernetesClientServices, string ns)
     {
         ctx.WrapDataIntoTable("apiresources",
             (await kubernetesClientServices.GetApiResourcesAsync()).Value.ToViewModel().ToImmutableArray());
@@ -26,11 +26,11 @@ public static class KustoQueryContextExtensions
         ctx.WrapDataIntoTable("componentstatuses",
             (await kubernetesClientServices.GetComponentStatusesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("configmaps",
-            (await kubernetesClientServices.GetConfigMapsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetConfigMapsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("controllerrevisions",
-            (await kubernetesClientServices.GetControllerRevisionsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetControllerRevisionsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("cronjobs",
-            (await kubernetesClientServices.GetCronJobsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetCronJobsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("csidrivers",
             (await kubernetesClientServices.GetCsiDriversAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("csinodes",
@@ -40,35 +40,35 @@ public static class KustoQueryContextExtensions
         ctx.WrapDataIntoTable("customresourcedefinitions",
             (await kubernetesClientServices.GetCustomResourceDefinitionsAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("daemonsets",
-            (await kubernetesClientServices.GetDaemonSetsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetDaemonSetsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("deployments",
-            (await kubernetesClientServices.GetDeploymentsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetDeploymentsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("deviceclasses",
             (await kubernetesClientServices.GetDeviceClassesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("endpointslices",
-            (await kubernetesClientServices.GetEndpointSlicesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetEndpointSlicesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("endpoints",
-            (await kubernetesClientServices.GetEndpointsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetEndpointsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("events",
-            (await kubernetesClientServices.GetEventsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetEventsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("flowschemas",
             (await kubernetesClientServices.GetFlowSchemasAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("horizontalpodautoscalers",
-            (await kubernetesClientServices.GetHorizontalPodAutoscalersAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetHorizontalPodAutoscalersAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("ingressclasses",
             (await kubernetesClientServices.GetIngressClassesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("ingresses",
-            (await kubernetesClientServices.GetIngressesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetIngressesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("ipaddresses",
             (await kubernetesClientServices.GetIPAddressesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("jobs",
-            (await kubernetesClientServices.GetJobsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetJobsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("leasecandidates",
-            (await kubernetesClientServices.GetLeaseCandidatesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetLeaseCandidatesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("leases",
-            (await kubernetesClientServices.GetLeasesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetLeasesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("limitranges",
-            (await kubernetesClientServices.GetLimitRangesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetLimitRangesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("mutatingadmissionpolicies",
             (await kubernetesClientServices.GetMutatingAdmissionPoliciesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("mutatingadmissionpolicybindings",
@@ -78,7 +78,7 @@ public static class KustoQueryContextExtensions
         ctx.WrapDataIntoTable("namespaces",
             (await kubernetesClientServices.GetNamespacesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("networkpolicies",
-            (await kubernetesClientServices.GetNetworkPoliciesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetNetworkPoliciesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("nodes",
             (await kubernetesClientServices.GetNodesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("persistentvolumeclaims",
@@ -86,43 +86,43 @@ public static class KustoQueryContextExtensions
         ctx.WrapDataIntoTable("persistentvolumes",
             (await kubernetesClientServices.GetPersistentVolumesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("poddisruptionbudgets",
-            (await kubernetesClientServices.GetPodDisruptionBudgetsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetPodDisruptionBudgetsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("podtemplates",
-            (await kubernetesClientServices.GetPodTemplatesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetPodTemplatesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("pods",
-            (await kubernetesClientServices.GetPodsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetPodsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("priorityclasses",
             (await kubernetesClientServices.GetPriorityClassesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("prioritylevelconfigurations",
             (await kubernetesClientServices.GetPriorityLevelConfigurationsAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("replicasets",
-            (await kubernetesClientServices.GetReplicaSetsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetReplicaSetsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("replicationcontrollers",
-            (await kubernetesClientServices.GetReplicationControllersAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetReplicationControllersAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("resourceclaimtemplates",
-            (await kubernetesClientServices.GetResourceClaimTemplatesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetResourceClaimTemplatesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("resourceclaims",
-            (await kubernetesClientServices.GetResourceClaimsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetResourceClaimsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("resourcequotas",
-            (await kubernetesClientServices.GetResourceQuotasAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetResourceQuotasAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("resourceslices",
             (await kubernetesClientServices.GetResourceSlicesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("rolebindings",
-            (await kubernetesClientServices.GetRoleBindingsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetRoleBindingsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("roles",
-            (await kubernetesClientServices.GetRolesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetRolesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("runtimeclasses",
             (await kubernetesClientServices.GetRuntimeClassesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("secrets",
-            (await kubernetesClientServices.GetSecretsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetSecretsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("serviceaccounts",
-            (await kubernetesClientServices.GetServiceAccountsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetServiceAccountsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("servicecidrs",
             (await kubernetesClientServices.GetServiceCIDRSAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("services",
-            (await kubernetesClientServices.GetServicesAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetServicesAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("statefulsets",
-            (await kubernetesClientServices.GetStatefulSetsAsync()).Value.ToViewModel().ToImmutableArray());
+            (await kubernetesClientServices.GetStatefulSetsAsync(ns)).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("storageclasses",
             (await kubernetesClientServices.GetStorageClassesAsync()).Value.ToViewModel().ToImmutableArray());
         ctx.WrapDataIntoTable("storageversionmigrations",

@@ -1,4 +1,9 @@
 {{#each this}}
+        {{#if IsNamespaced}}
+        ctx.WrapDataIntoTable("{{AsCommandName Title}}",
+            (await kubernetesClientServices.{{ListMethod}}(ns)).Value.ToViewModel().ToImmutableArray());
+        {{else}}
         ctx.WrapDataIntoTable("{{AsCommandName Title}}",
             (await kubernetesClientServices.{{ListMethod}}()).Value.ToViewModel().ToImmutableArray());
+        {{/if}}
 {{/each}}

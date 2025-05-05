@@ -1,18 +1,12 @@
 ﻿using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Text.Json;
 using KustoLoco.Core;
 using KustoLoco.Core.Settings;
 using KustoLoco.Rendering.ScottPlot;
-using PutridParrot.Results;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using XKube.Commands.Shared;
-using XKube.QueryLanguage;
 using XKube.Services;
 using XKube.Ui;
-using YamlDotNet.Core.Tokens;
 
 namespace XKube.Commands;
 
@@ -33,8 +27,13 @@ internal class QueryCommands(IKubernetesClientService kubernetesClientServices) 
             return 1;
         }
 
+        if (!string.IsNullOrEmpty(settings.Cluster))
+        {
+            kubernetesClientServices.LoadConfig(null, settings.Cluster, null);
+        }
+
         var ctx = new KustoQueryContext();
-        await ctx.RegisterTables(kubernetesClientServices);
+        await ctx.RegisterTables(kubernetesClientServices, settings.AllNamespaces ? null : settings.Namespace ?? kubernetesClientServices.CurrentNamespace);
 
         var result = await ctx.RunQuery(settings.Query);
         if (!string.IsNullOrEmpty(result.Error))
