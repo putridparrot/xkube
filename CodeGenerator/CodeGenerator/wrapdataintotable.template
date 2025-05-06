@@ -1,9 +1,9 @@
 {{#each this}}
         {{#if IsNamespaced}}
-        ctx.WrapDataIntoTable("{{AsCommandName Title}}",
-            (await kubernetesClientServices.{{ListMethod}}(ns)).Value.ToViewModel().ToImmutableArray());
+         await ctx.RegisterTable(tables, "{{AsCommandName Title}}",
+            async() => (await kubernetesClientServices.{{ListMethod}}(ns)).Value.ToViewModel());
         {{else}}
-        ctx.WrapDataIntoTable("{{AsCommandName Title}}",
-            (await kubernetesClientServices.{{ListMethod}}()).Value.ToViewModel().ToImmutableArray());
+         await ctx.RegisterTable(tables, "{{AsCommandName Title}}",
+            async() => (await kubernetesClientServices.{{ListMethod}}()).Value.ToViewModel());
         {{/if}}
 {{/each}}

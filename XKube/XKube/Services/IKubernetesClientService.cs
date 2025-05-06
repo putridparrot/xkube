@@ -12,7 +12,7 @@ public interface IKubernetesClientService
     string CurrentContext { get; }
     K8SConfiguration? ClustersConfiguration { get; }
 
-    string CurrentNamespace { get; set; }
+    string? CurrentNamespace { get; set; }
 
     Task<string[]> GetNamespaceNamesAsync();
 

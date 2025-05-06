@@ -10,11 +10,11 @@
     },
     "Query3": {
       "commandName": "Project",
-      "commandLineArgs": "query \"pods | where Namespace contains 'kube-system' | count\""
+      "commandLineArgs": "query \"pods | where Namespace contains 'kube-system' | count\" -a"
     },
     "Query4": {
       "commandName": "Project",
-      "commandLineArgs": "query \"pods | summarize count() by Name | render piechart\""
+      "commandLineArgs": "query \"pods | summarize count() by Name | render piechart\" -a"
     },
     "Get Pods": {
       "commandName": "Project",

@@ -641,7 +641,7 @@ Definitions:
       - Title: "Status"
         Expression: "item.Status.Phase"
       - Title: "Restarts"
-        Expression: "$\"{GetRestarts(item)} ({GetLastRestart(item)})\""
+        Expression: "GetRestarts(item)"
       - Title: "Pod IP"
         Expression: "item.Status.PodIP"
       - Title: "Age"

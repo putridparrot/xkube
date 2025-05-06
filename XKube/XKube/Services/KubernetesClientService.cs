@@ -20,14 +20,17 @@ internal class KubernetesClientService : IKubernetesClientService
 
     public void LoadConfig(string? configLocation, string? context)
     {
+        _kubernetes?.Dispose();
+
         _kubernetesClientConfiguration =
             KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
-        _kubernetesClientConfiguration.Namespace = "default";
         _kubernetes = new Kubernetes(_kubernetesClientConfiguration);
     }
 
     public void LoadConfig(string? configLocation, string? context, string? ns)
     {
+        _kubernetes?.Dispose();
+
         _kubernetesClientConfiguration =
             KubernetesClientConfiguration.BuildConfigFromConfigFile(configLocation, currentContext: context);
         _kubernetesClientConfiguration.Namespace = ns;
@@ -36,7 +39,7 @@ internal class KubernetesClientService : IKubernetesClientService
 
     public string CurrentContext => _kubernetesClientConfiguration?.CurrentContext ?? string.Empty;
 
-    public string CurrentNamespace 
+    public string? CurrentNamespace 
     { 
         get => _kubernetesClientConfiguration?.Namespace ?? string.Empty;
         set 
