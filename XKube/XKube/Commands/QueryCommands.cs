@@ -19,16 +19,24 @@ internal class QueryCommands(IKubernetesClientService kubernetesClientServices) 
 {
     public sealed class Settings : NamespaceCommandSettings
     {
-        [CommandArgument(0, "<query>")]
+        [CommandArgument(0, "[query]")]
         [Description("The query string to execute")]
         public string? Query { get; set; }
+        [CommandOption("-s|--script <file>")]
+        [Description("Execute the supplied")]
+        public string? Script { get; set; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        if (!string.IsNullOrEmpty(settings.Script))
+        {
+            settings.Query = await File.ReadAllTextAsync(settings.Script);
+        }
+
         if (string.IsNullOrWhiteSpace(settings.Query))
         {
-            AnsiConsole.MarkupLine("[red]Error: Query cannot be null or empty.[/]");
+            AnsiConsole.MarkupLine("[red]Error: Either a query or script is required.[/]");
             return 1;
         }
 
@@ -38,7 +46,8 @@ internal class QueryCommands(IKubernetesClientService kubernetesClientServices) 
         }
 
         // parse query to get tables and reduce the data added to the context
-        var code = KustoCode.ParseAndAnalyze(settings.Query, GetGlobalState());
+        var globalState = GetGlobalState();
+        var code = KustoCode.ParseAndAnalyze(settings.Query, globalState);
         var tables = GetDatabaseTables(code);
 
         var ctx = new KustoQueryContext();

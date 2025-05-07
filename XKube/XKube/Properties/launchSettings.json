@@ -23,6 +23,10 @@
     "Get Clusters": {
       "commandName": "Project",
       "commandLineArgs": "get clusters"
+    },
+    "Run Script": {
+      "commandName": "Project",
+      "commandLineArgs": "query -s D:\\Development\\putridparrot\\xkube\\XKube\\XKube\\bin\\Debug\\net9.0\\go-pods.kql"
     }
   }
 }
