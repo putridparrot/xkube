@@ -19,24 +19,21 @@ internal class QueryCommands(IKubernetesClientService kubernetesClientServices) 
 {
     public sealed class Settings : NamespaceCommandSettings
     {
-        [CommandArgument(0, "[query]")]
-        [Description("The query string to execute")]
+        [CommandArgument(0, "<query>")]
+        [Description("A query string or file to execute")]
         public string? Query { get; set; }
-        [CommandOption("-s|--script <file>")]
-        [Description("Execute the supplied")]
-        public string? Script { get; set; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        if (!string.IsNullOrEmpty(settings.Script))
+        if (File.Exists(settings.Query))
         {
-            settings.Query = await File.ReadAllTextAsync(settings.Script);
+            settings.Query = await File.ReadAllTextAsync(settings.Query);
         }
 
         if (string.IsNullOrWhiteSpace(settings.Query))
         {
-            AnsiConsole.MarkupLine("[red]Error: Either a query or script is required.[/]");
+            AnsiConsole.MarkupLine("[red]Error: Either a query or file is required.[/]");
             return 1;
         }
 
